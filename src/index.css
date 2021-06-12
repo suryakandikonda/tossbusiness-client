@@ -1,13 +1,192 @@
+@import url("https://fonts.googleapis.com/css2?family=Heebo:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Arvo&family=Playfair+Display:wght@500&display=swap");
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #f3f6fd;
+}
+
+* {
+  /* font-family: "Heebo", sans-serif; */
+  font-family: "Arvo", serif;
+  /* font-family: 'Playfair Display', serif; */
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+p {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.PreLoginHeaderMainDiv {
+  padding: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.LoginMainDiv {
+  margin-top: 160px;
+  text-align: center;
+}
+
+.SignupMainDiv {
+  margin-top: 80px;
+}
+
+.LoginFormDiv {
+  margin-top: 30px;
+}
+
+.SidePanel {
+  height: 100vh;
+  background-color: #f3f6fd;
+  width: 150px;
+  text-align: center;
+  /* box-shadow: 2px 0px 5px black; */
+}
+
+.SidePanelItemsDiv {
+  margin-top: 100px;
+}
+
+.SidePanelItem {
+  margin-bottom: 40px;
+  padding: 10px;
+}
+
+
+
+#SidePanelItemSelected {
+  background-color: #212121;
+  color: white;
+  border-radius: 60px;
+  display: inline-block;
+}
+
+.HeaderMainDiv {
+  background-color: #f3f6fd;
+  width: 100%;
+  height: 65px;
+  /* border-left: 1px solid rgba(0, 0, 0, 0.2); */
+}
+
+.HeaderItemDiv {
+  padding-top: 15px;
+}
+
+.nopadding {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.PageContentMainDiv {
+  width: 100%;
+  height: 100%;
+  /* background-color: #f4f4f4; */
+}
+
+.PageContentContentDiv {
+  margin-left: 150px;
+}
+
+@media (max-width: 600px) {
+  .PageContentContentDiv {
+    margin-left: 0px;
+    padding-bottom: 60px;
+  }
+}
+
+.PageMainDiv {
+  background-color: #f3f6fd;
+  height: 100vh;
+}
+
+.PageMainDivContent {
+  border-radius: 50px;
+  background-color: white;
+  padding: 30px;
+  height: 100vh;
+  margin-right: 20px;
+}
+
+.ProjectsTopDiv {
+  margin-top: 40px;
+}
+
+.ProjectsItemsMainDiv {
+  margin: 20px;
+  margin-top: 80px;
+}
+
+.ProjectsItemDiv {
+  background-color: #BAF3D2;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
+
+.ProjectsItemDiv:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.ProjectsItemTitle {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.ViewProjectTopDiv {
+  margin-top: 30px;
+}
+
+.ViewProjectTopDivItem {
+  background-color: #E0E0E0;
+  border-radius: 10px;
+  padding: 15px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.ViewProjectTopDivItem h5 {
+  font-weight: 500;
+}
+
+.ViewProjectTopDivItem h6 {
+  color: #9E9E9E;
+}
+
+.InProgressDiv {
+  background-color: #388E3C;
+  color: white;
+  display: inline-block;
+  padding: 4px 20px;
+  padding-top: 6px;
+  border-radius: 20px;
+}
+
+.ViewProjectsOpenTasksTitle {
+  margin-top: 30px;
+  margin-bottom: 25px;
+}
+
+.ViewProjectsOpenTasksItem {
+  background-color: white;
+  border: 1px solid #9E9E9E;
+  padding: 20px;
+  border-radius: 4px;
+  margin: 14px;
+  margin-top: 20px;
+}
+
+.PeopleTableMainDiv {
+  margin-top: 20px;
+}
+
+#NoHoverLink {
+  text-decoration: none;
+  color: black;
+}
+
+
