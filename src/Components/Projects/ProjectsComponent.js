@@ -1,12 +1,108 @@
-import { Badge, Tooltip } from "evergreen-ui";
+import { Badge, Tooltip, Button, SelectMenu } from "evergreen-ui";
+import moment from "moment";
 import React, { Component } from "react";
 import { IoAddOutline } from "react-icons/io5";
+import { Link } from "react-router-dom";
 import { Row, Col } from "reactstrap";
+import Cookies from "universal-cookie/es6";
+import { SERVER_URL } from "../../constants/variables";
 import HeaderComponent from "../HeaderComponent";
+import LoadingComponent from "../LoadingComponent";
 import SidebarComponent from "../SidebarComponent";
 
 class ProjectsComponent extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      cookies: new Cookies(),
+      isLoading: true,
+
+      data: [],
+      onGoingProjects: [],
+      completedProjects: [],
+      stoppedProjects: [],
+      displayData: [],
+
+      //
+      selectedFilter: "Ongoing",
+      filterOptions: ["ongoing", "completed", "stopped"],
+    };
+  }
+
+  handleFilterChange = (option) => {
+    var displayData = [];
+
+    var op = option.toLowerCase();
+    if (op == "ongoing") {
+      displayData = this.state.onGoingProjects;
+    }
+    if (op == "stopped") {
+      displayData = this.state.stoppedProjects;
+    }
+    if (op == "completed") {
+      displayData = this.state.completedProjects;
+    }
+    this.setState({
+      selectedFilter: option,
+      displayData: displayData,
+    });
+  };
+
+  componentDidMount() {
+    var userDetails = this.state.cookies.get("userDetails");
+
+    if (userDetails.role === 3) {
+      this.getProjectByCompnayID();
+    }
+  }
+
+  getProjectByCompnayID = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("company", this.state.cookies.get("userDetails").company);
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(SERVER_URL + "/project/getProjectsByCompanyID", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if (result.success) {
+          var data = result.data;
+          var onGoingProjects = [];
+          var stoppedProjects = [];
+          var completedProjects = [];
+
+          onGoingProjects = data.filter((item) => item.status === "ongoing");
+
+          stoppedProjects = data.filter((item) => item.status === "stopped");
+
+          completedProjects = data.filter(
+            (item) => item.status === "completed"
+          );
+          this.setState({
+            data: result.data,
+            onGoingProjects: onGoingProjects,
+            stoppedProjects: stoppedProjects,
+            completedProjects: completedProjects,
+            displayData: onGoingProjects,
+            isLoading: false,
+          });
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
   render() {
+    if (this.state.isLoading) {
+      return (
+        <React.Fragment>
+          <LoadingComponent />
+        </React.Fragment>
+      );
+    }
     return (
       <React.Fragment>
         <div className="container-fluid">
@@ -34,7 +130,7 @@ class ProjectsComponent extends Component {
                           <Col sm>
                             <div>
                               <h4>
-                                <b>5</b>
+                                <b>{this.state.onGoingProjects.length}</b>
                               </h4>
                               <p>Ongoing</p>
                             </div>
@@ -42,7 +138,7 @@ class ProjectsComponent extends Component {
                           <Col sm>
                             <div>
                               <h4>
-                                <b>6</b>
+                                <b>{this.state.completedProjects.length}</b>
                               </h4>
                               <p>Completed</p>
                             </div>
@@ -50,7 +146,7 @@ class ProjectsComponent extends Component {
                           <Col sm>
                             <div>
                               <h4>
-                                <b>2</b>
+                                <b>{this.state.stoppedProjects.length}</b>
                               </h4>
                               <p>Stopped</p>
                             </div>
@@ -58,54 +154,100 @@ class ProjectsComponent extends Component {
                           <Col sm>
                             <div>
                               <h4>
-                                <b>1</b>
+                                <b>{this.state.data.length}</b>
                               </h4>
-                              <p>Paused</p>
+                              <p>Total</p>
                             </div>
                           </Col>
                         </Row>
                       </div>
+                      <hr />
+
+                      <div style={{ marginTop: "30px" }}>
+                        <p>Filter Projects by Status: </p>
+                        <br />
+                        <SelectMenu
+                          title="Filter Projects by Status"
+                          options={this.state.filterOptions.map((label) => ({
+                            label,
+                            value:
+                              label.charAt(0).toUpperCase() + label.slice(1),
+                          }))}
+                          selected={this.state.selectedFilter}
+                          onSelect={(item) =>
+                            this.handleFilterChange(item.value)
+                          }
+                        >
+                          <Button>
+                            {this.state.selectedFilter || "Filter... "}
+                          </Button>
+                        </SelectMenu>
+                      </div>
 
                       <div className="ProjectsItemsMainDiv">
                         <Row>
-                          <Col sm="6">
-                            <div className="ProjectsItemDiv">
-                              <p>June 4th 2021 </p>
-                              <div className="ProjectsItemTitle">
-                                <h5>
-                                  <b>Web Designing</b>
-                                </h5>
-                                <p>CRM Tool</p>
-                              </div>
-                              <div>
-                                <p>
-                                  <b>Progress: </b>73%
-                                </p>
-                              </div>
-                              <hr />
-                              <Row>
-                                <Col sm>
-                                  <div>
+                          {this.state.data.length > 0 &&
+                            this.state.displayData.map((item) => (
+                              <Col sm="6">
+                                <Link
+                                  to={`/project/${item._id}`}
+                                  id="NoHoverLink"
+                                >
+                                  <div className="ProjectsItemDiv">
                                     <p>
-                                      <b>Team: </b> 4
+                                      Start Date:{" "}
+                                      {moment(item.start_date).format(
+                                        "MMM DD, YYYY"
+                                      )}{" "}
                                     </p>
+                                    <div className="ProjectsItemTitle">
+                                      <h5>
+                                        <b>{item.name}</b>
+                                      </h5>
+                                      <p
+                                        style={{
+                                          color: "#9E9E9E",
+                                          fontSize: "12px",
+                                        }}
+                                      >
+                                        {item.category.toUpperCase()}
+                                      </p>
+                                    </div>
+                                    <div>
+                                      <p>
+                                        <b>Progress: </b>
+                                        {item.progress + " %"}
+                                      </p>
+                                    </div>
+                                    <hr />
+                                    <Row>
+                                      <Col sm>
+                                        <div>
+                                          <p>
+                                            <b>Client: </b>{" "}
+                                            {item.client.first_name}
+                                          </p>
+                                        </div>
+                                      </Col>
+                                      <Col sm>
+                                        <div>
+                                          <p>
+                                            <b>Tasks: </b> {item.tasks.length}
+                                          </p>
+                                        </div>
+                                      </Col>
+                                      <Col sm>
+                                        <div>
+                                          <Badge color="green">
+                                            {moment().to(item.end_date)}
+                                          </Badge>
+                                        </div>
+                                      </Col>
+                                    </Row>
                                   </div>
-                                </Col>
-                                <Col sm>
-                                  <div>
-                                    <p>
-                                      <b>Tasks: </b> 6
-                                    </p>
-                                  </div>
-                                </Col>
-                                <Col sm>
-                                  <div>
-                                    <Badge color="green">3 weeks left</Badge>
-                                  </div>
-                                </Col>
-                              </Row>
-                            </div>
-                          </Col>
+                                </Link>
+                              </Col>
+                            ))}
                         </Row>
                       </div>
                     </div>

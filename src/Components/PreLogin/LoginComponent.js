@@ -13,7 +13,7 @@ class LoginComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email_address: "",
+      email: "",
       password: "",
 
       //
@@ -40,7 +40,7 @@ class LoginComponent extends Component {
       login_clicked: true,
     });
     this.loginUser({
-      username: this.state.email_address,
+      username: this.state.email,
       password: this.state.password,
     });
   }
@@ -69,7 +69,8 @@ class LoginComponent extends Component {
           this.setState({
             login_clicked: false,
           });
-          window.location.href = "/projects";
+          if (result.user.company !== null) window.location.href = "/projects";
+          else toaster.notify("Client page coming soon");
         } else {
           this.setState({
             login_clicked: false,
@@ -107,7 +108,7 @@ class LoginComponent extends Component {
                 <div className="LoginFormDiv">
                   <TextInput
                     type="email"
-                    name="email_address"
+                    name="email"
                     placeholder="Email address"
                     onChange={this.handleInputChange}
                   />

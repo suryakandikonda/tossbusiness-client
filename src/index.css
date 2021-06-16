@@ -56,8 +56,6 @@ p {
   padding: 10px;
 }
 
-
-
 #SidePanelItemSelected {
   background-color: #212121;
   color: white;
@@ -100,14 +98,14 @@ p {
 
 .PageMainDiv {
   background-color: #f3f6fd;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .PageMainDivContent {
   border-radius: 50px;
   background-color: white;
   padding: 30px;
-  height: 100vh;
+  min-height: 100vh;
   margin-right: 20px;
 }
 
@@ -121,15 +119,15 @@ p {
 }
 
 .ProjectsItemDiv {
-  background-color: #BAF3D2;
+  background-color: #baf3d2;
   padding: 20px;
   border-radius: 20px;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
 }
 
 .ProjectsItemDiv:hover {
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
 .ProjectsItemTitle {
@@ -142,7 +140,7 @@ p {
 }
 
 .ViewProjectTopDivItem {
-  background-color: #E0E0E0;
+  background-color: #e0e0e0;
   border-radius: 10px;
   padding: 15px;
   margin-left: 10px;
@@ -154,11 +152,11 @@ p {
 }
 
 .ViewProjectTopDivItem h6 {
-  color: #9E9E9E;
+  color: #9e9e9e;
 }
 
 .InProgressDiv {
-  background-color: #388E3C;
+  background-color: #388e3c;
   color: white;
   display: inline-block;
   padding: 4px 20px;
@@ -173,11 +171,17 @@ p {
 
 .ViewProjectsOpenTasksItem {
   background-color: white;
-  border: 1px solid #9E9E9E;
+  border: 1px solid #e0e0e0;
   padding: 20px;
-  border-radius: 4px;
+  border-radius: 8px;
   margin: 14px;
-  margin-top: 20px;
+  margin-top: 30px;
+}
+
+.ViewProjectsOpenTasksItem:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  border: 1px solid #BDBDBD;
 }
 
 .PeopleTableMainDiv {
@@ -188,5 +192,3 @@ p {
   text-decoration: none;
   color: black;
 }
-
-

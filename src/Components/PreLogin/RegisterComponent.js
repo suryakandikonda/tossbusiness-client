@@ -13,7 +13,7 @@ class RegisterComponent extends Component {
     this.state = {
       first_name: "",
       last_name: "",
-      email_address: "",
+      email: "",
       mobile_number: "",
       password: "",
       company_name: "",
@@ -121,7 +121,7 @@ class RegisterComponent extends Component {
 
     this.registerUser({
       password: this.state.password,
-      email_address: this.state.email_address,
+      email: this.state.email,
       first_name: this.state.first_name,
       last_name: this.state.last_name,
       company_name: this.state.company_name,
@@ -187,7 +187,7 @@ class RegisterComponent extends Component {
           <div>
             <p>
               We have sent an email with 6 digit OTP to your email address (
-              {this.state.email_address}). Please enter the OTP to verify your
+              {this.state.email}). Please enter the OTP to verify your
               email. You can do this later too.
             </p>
             <br />
@@ -234,7 +234,7 @@ class RegisterComponent extends Component {
                   <br />
                   <TextInput
                     type="email"
-                    name="email_address"
+                    name="email"
                     placeholder="Email address *"
                     onChange={this.handleInputChange}
                   />
