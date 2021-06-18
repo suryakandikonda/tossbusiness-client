@@ -60,6 +60,32 @@ class ViewProjectComponent extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
+  checkCanUpdateTaskProgress = (userId, taskId) => {
+    var task = this.state.tasks.filter((item) => item._id == taskId)[0];
+    console.log("task", task);
+    for (var i = 0; i < task.assigned_to.length; i++) {
+      console.log(task.assigned_to.[i]._id);
+      console.log("Cookie:", this.state.cookies.get("userDetails")._id);
+      if (
+        task.assigned_to[i]._id.toString() ==
+        this.state.cookies.get("userDetails")._id.toString()
+      ) {
+        return true;
+      }
+    }
+    // task.assigned_to.forEach((user) => {
+    //   console.log(user._id);
+    //   console.log("Cookie:", this.state.cookies.get("userDetails")._id);
+    //   if (
+    //     user._id.toString() ==
+    //     this.state.cookies.get("userDetails")._id.toString()
+    //   ) {
+    //     return true;
+    //   }
+    // });
+    return false;
+  };
+
   createTask = () => {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -519,6 +545,15 @@ class ViewProjectComponent extends Component {
                                           <span>{user.first_name}</span>
                                         ))}
                                       </p>
+                                      <hr />
+                                      <p>Update task progress: </p>
+                                      {this.checkCanUpdateTaskProgress(
+                                        this.state.cookies.get("userDetails")
+                                          ._id,
+                                        task._id
+                                      )
+                                        ? "Can edit"
+                                        : "Cannot edit"}
                                     </div>
 
                                     {/* <div

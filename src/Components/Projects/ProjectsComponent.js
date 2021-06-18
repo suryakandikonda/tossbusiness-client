@@ -51,7 +51,7 @@ class ProjectsComponent extends Component {
   componentDidMount() {
     var userDetails = this.state.cookies.get("userDetails");
 
-    if (userDetails.role === 3) {
+    if (userDetails.role >=3 ) {
       this.getProjectByCompnayID();
     }
   }

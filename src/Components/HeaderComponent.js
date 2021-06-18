@@ -1,5 +1,6 @@
-import { Avatar } from "evergreen-ui";
+import { Avatar, SettingsIcon } from "evergreen-ui";
 import React, { Component } from "react";
+import { IoSettings } from "react-icons/io5";
 import { Col, Container, Row } from "reactstrap";
 
 class HeaderComponent extends Component {
@@ -19,7 +20,12 @@ class HeaderComponent extends Component {
               </Col>
               <Col sm>
                 <div style={{ paddingTop: "14px", textAlign: "right" }}>
-                  <Avatar name="Surya Kandikonda" size={40} />
+                  {/* <span style={{ marginRight: "20px" }}>
+                    <IoSettings />
+                  </span> */}
+                  <span>
+                    <Avatar name="Surya Kandikonda" size={40} />
+                  </span>
                 </div>
               </Col>
             </Row>

@@ -9,7 +9,10 @@ import {
   RadioGroup,
   Textarea,
   toaster,
+  TrashIcon,
+  DownloadIcon,
 } from "evergreen-ui";
+import moment from "moment";
 import React, { Component } from "react";
 import { IoAddOutline } from "react-icons/io5";
 import { Row, Col, Input } from "reactstrap";
@@ -23,8 +26,9 @@ class VisitsComponent extends Component {
     super(props);
     this.state = {
       cookies: new Cookies(),
+      userDetails: "",
       selectedFilter: "All",
-      filterOptions: ["All", "Admins", "Finance", "Tech"],
+      filterOptions: ["All", "Customer", "Investor", "Other"],
       personTypeOptions: [
         {
           label: "Customer",
@@ -51,10 +55,104 @@ class VisitsComponent extends Component {
       address: "",
       remarks: "",
       next_followup_date: "",
+      //
+
+      data: [],
+      original_data: [],
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
   }
+
+  downloadPDF = () => {
+    toaster.notify("Downloading PDF...");
+    var tableColumns = [
+      "#",
+      "Name",
+      "Type",
+      "Mobile Number",
+      "Address",
+      "Remarks",
+      "Next followup date",
+    ];
+
+    var tableRows = [];
+    var i = 1;
+    tableRows.push(tableColumns);
+    this.state.data.forEach((item) => {
+      var sampArr = [
+        i,
+        item.name,
+        item.contact_person_type,
+        item.mobile_number,
+        item.address,
+        item.remarks,
+        moment(item.next_followup_date).format("DD MMM, YYYY"),
+      ];
+      tableRows.push(sampArr);
+      console.log(sampArr);
+      i += 1;
+    });
+
+    var dd = {
+      content: [
+        {
+          text: "Date: " + moment().format("DD MMM, YYYY"),
+          bold: true,
+          alignment: "right",
+        },
+        {
+          text: "Visits Report",
+          alignment: "center",
+          fontSize: 18,
+          bold: true,
+          margin: [0, 20, 0, 8],
+        },
+        {
+          text:
+            "Report of: " +
+            this.state.userDetails.first_name +
+            " " +
+            this.state.userDetails.last_name +
+            "\n\n\n",
+          alignment: "center",
+        },
+        {
+          table: {
+            widths: "auto",
+            headerRows: 1,
+            body: tableRows,
+          },
+          layout: "lightHorizontalLines",
+        },
+      ],
+    };
+    window.pdfMake.createPdf(dd).download("VisitsReport" + Date.now() + ".pdf");
+  };
+
+  getVisits = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("created_by", this.state.cookies.get("userDetails")._id);
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(SERVER_URL + "/visit/get", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if (result.success) {
+          this.setState({
+            data: result.data,
+            original_data: result.data,
+          });
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
 
   createVisitAPI = (creds) => {
     this.setState({
@@ -107,6 +205,7 @@ class VisitsComponent extends Component {
       remarks: "",
       next_followup_date: "",
     });
+    this.getVisits();
   };
 
   handleInputChange(event) {
@@ -121,11 +220,39 @@ class VisitsComponent extends Component {
     });
   }
 
+  handleSearchQuery = (value) => {
+    var new_data = this.state.original_data.filter((item) =>
+      item.name.toLowerCase().includes(value.toLowerCase())
+    );
+    this.setState({
+      data: new_data,
+    });
+  };
+
   handleFilterChange = (option) => {
     this.setState({
       selectedFilter: option,
     });
+    if (option == "All") {
+      this.setState({
+        data: this.state.original_data,
+      });
+    } else {
+      var new_data = this.state.original_data.filter(
+        (item) => item.contact_person_type == option
+      );
+      this.setState({
+        data: new_data,
+      });
+    }
   };
+
+  componentDidMount() {
+    this.setState({
+      userDetails: this.state.cookies.get("userDetails"),
+    });
+    this.getVisits();
+  }
   render() {
     return (
       <React.Fragment>
@@ -243,19 +370,66 @@ class VisitsComponent extends Component {
                             {this.state.selectedFilter || "Filter people..."}
                           </Button>
                         </SelectMenu>
+                        <Button
+                          marginY={8}
+                          marginLeft={12}
+                          iconBefore={DownloadIcon}
+                          onClick={this.downloadPDF}
+                        >
+                          Download PDF
+                        </Button>
                       </div>
+
+                      <div></div>
+
                       <div className="PeopleTableMainDiv">
                         <Table>
                           <Table.Head>
-                            <Table.SearchHeaderCell />
+                            <Table.SearchHeaderCell
+                              onChange={(value) =>
+                                this.handleSearchQuery(value)
+                              }
+                              placeholder="Search by name"
+                            />
 
-                            <Table.TextHeaderCell>Role</Table.TextHeaderCell>
+                            <Table.TextHeaderCell>Type</Table.TextHeaderCell>
+                            <Table.TextHeaderCell>
+                              Mobile Number
+                            </Table.TextHeaderCell>
+                            <Table.TextHeaderCell>Address</Table.TextHeaderCell>
+                            <Table.TextHeaderCell>Remarks</Table.TextHeaderCell>
+                            <Table.TextHeaderCell>
+                              Next followup date
+                            </Table.TextHeaderCell>
+                            <Table.TextHeaderCell>Actions</Table.TextHeaderCell>
                           </Table.Head>
                           <Table.Body height={240}>
-                            <Table.Row isSelectable>
-                              <Table.TextCell>Surya</Table.TextCell>
-                              <Table.TextCell>Admin</Table.TextCell>
-                            </Table.Row>
+                            {this.state.data.length > 0 &&
+                              this.state.data.map((item) => (
+                                <Table.Row isSelectable>
+                                  <Table.TextCell>{item.name}</Table.TextCell>
+                                  <Table.TextCell>
+                                    {item.contact_person_type}
+                                  </Table.TextCell>
+                                  <Table.TextCell>
+                                    {item.mobile_number}
+                                  </Table.TextCell>
+                                  <Table.TextCell>
+                                    {item.address}
+                                  </Table.TextCell>
+                                  <Table.TextCell>
+                                    {item.remarks}
+                                  </Table.TextCell>
+                                  <Table.TextCell>
+                                    {moment(item.next_followup_date).format(
+                                      "DD MMM, YYYY"
+                                    )}
+                                  </Table.TextCell>
+                                  <Table.TextCell>
+                                    <TrashIcon />
+                                  </Table.TextCell>
+                                </Table.Row>
+                              ))}
                           </Table.Body>
                         </Table>
                       </div>

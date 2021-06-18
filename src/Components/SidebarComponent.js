@@ -8,6 +8,8 @@ import {
 } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
+import TossLogo from "../assets/TossLogo.png";
+
 class SidebarComponent extends Component {
   constructor(props) {
     super(props);
@@ -20,6 +22,9 @@ class SidebarComponent extends Component {
       <React.Fragment>
         <div className="col-sm-0 nopadding d-none d-sm-block">
           <div className="SidePanel fixed-top">
+            <div style={{ textAlign: "center" }}>
+              <img src={TossLogo} className="img-fluid" />
+            </div>
             <div className="SidePanelItemsDiv">
               <Link to="/home" id="NoHoverLink">
                 <div
