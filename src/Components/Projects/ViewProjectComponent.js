@@ -16,6 +16,8 @@ import {
   Textarea,
   SelectMenu,
   toaster,
+  PeopleIcon,
+  StopIcon,
 } from "evergreen-ui";
 import moment from "moment";
 import React, { Component } from "react";
@@ -39,6 +41,8 @@ class ViewProjectComponent extends Component {
       companyMembersNames: [],
       details: {},
       tasks: [],
+      technologies: [],
+      projectProgress: 0,
       isLoading: true,
       show_project_details: false,
       delete_clicked_first: false,
@@ -53,6 +57,11 @@ class ViewProjectComponent extends Component {
       status: "",
       assigned_to: [],
 
+      taskSelected: "",
+      taskProgress: "",
+      task_progress_update_first_clicked: false,
+      task_progress_update_second_clicked: false,
+
       //
       assignedToSelectedItems: [],
       assignedToSelectedItemsNames: [],
@@ -60,15 +69,81 @@ class ViewProjectComponent extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
+  handleTaskProgressUpdateOpen = (task) => {
+    console.log("Selected task is: ", task);
+    this.setState({
+      task_progress_update_first_clicked: true,
+      taskSelected: task,
+
+      task_name: task.name,
+      task_summary: task.summary,
+      start_date: task.start_date,
+      end_date: task.end_date,
+      taskProgress: task.progress,
+    });
+  };
+
+  handleTaskProgressUpdateClose = () => {
+    this.setState({
+      tasktaskSelected: "",
+      taskProgress: "",
+      task_progress_update_first_clicked: false,
+      task_progress_update_second_clicked: false,
+
+      //
+      task_name: "",
+      task_summary: "",
+      start_date: "",
+      end_date: "",
+      status: "",
+      assigned_to: [],
+    });
+  };
+
+  updateTaskAPI = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      project: this.state.project,
+      taskId: this.state.taskSelected._id,
+      name: this.state.task_name,
+      summary: this.state.task_summary,
+      progress: Number(this.state.taskProgress),
+      assigned_to: this.state.taskSelected.assigned_to,
+    });
+
+    var requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(SERVER_URL + "/project/updateTask", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if (result.success) {
+          toaster.success("Task updated Successfully");
+          this.handleTaskProgressUpdateClose();
+        } else {
+          toaster.danger("Something went wrong. Please try again");
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
+
   checkCanUpdateTaskProgress = (userId, taskId) => {
     var task = this.state.tasks.filter((item) => item._id == taskId)[0];
     console.log("task", task);
     for (var i = 0; i < task.assigned_to.length; i++) {
-      console.log(task.assigned_to.[i]._id);
+      console.log(task.assigned_to[i]._id);
       console.log("Cookie:", this.state.cookies.get("userDetails")._id);
       if (
         task.assigned_to[i]._id.toString() ==
-        this.state.cookies.get("userDetails")._id.toString()
+          this.state.cookies.get("userDetails")._id.toString() ||
+        this.state.cookies.get("userDetails").role === 3
       ) {
         return true;
       }
@@ -170,9 +245,19 @@ class ViewProjectComponent extends Component {
       .then((result) => {
         console.log(result);
         if (result.success) {
+          var tasks = result.data.tasks;
+          var progress = 0;
+          if (tasks.length > 0) {
+            tasks.forEach((task) => {
+              progress += task.progress;
+            });
+            progress = parseInt(progress / tasks.length);
+          }
           this.setState({
             details: result.data,
             tasks: result.data.tasks,
+            technologies: result.data.technologies,
+            projectProgress: progress,
           });
         }
       })
@@ -221,6 +306,70 @@ class ViewProjectComponent extends Component {
   render() {
     return (
       <React.Fragment>
+        {/* Update Task Progress */}
+        <Dialog
+          isShown={this.state.task_progress_update_first_clicked}
+          title="Update Task"
+          confirmLabel="Update"
+          onConfirm={this.updateTaskAPI}
+          onCloseComplete={this.handleTaskProgressUpdateClose}
+        >
+          <div>
+            <TextInput
+              placeholder="Task Name"
+              name="task_name"
+              onChange={this.handleInputChange}
+              value={this.state.task_name}
+              width="100%"
+            />
+            <br />
+            <br />
+            <Textarea
+              placeholder="Task Summary"
+              name="task_summary"
+              onChange={this.handleInputChange}
+              value={this.state.task_summary}
+            />
+            <br />
+            <br />
+            <Row>
+              <Col sm>
+                <div>
+                  <p>Start date:</p>
+                  <Input
+                    type="date"
+                    name="start_date"
+                    onChange={this.handleInputChange}
+                    value={this.state.start_date}
+                  />
+                </div>
+              </Col>
+
+              <Col sm>
+                <div>
+                  <p>End date:</p>
+                  <Input
+                    type="date"
+                    name="end_date"
+                    onChange={this.handleInputChange}
+                    value={this.state.end_date}
+                  />
+                </div>
+              </Col>
+            </Row>
+            <br />
+            <TextInput
+              type="number"
+              placeholder="Task Progress: "
+              name="taskProgress"
+              onChange={this.handleInputChange}
+              value={this.state.taskProgress}
+              width="100%"
+              min={0}
+              max={100}
+            />
+          </div>
+        </Dialog>
         <Dialog
           isShown={this.state.create_task_clicked_first}
           title="Create New Task for Project"
@@ -322,7 +471,7 @@ class ViewProjectComponent extends Component {
               }}
             >
               <Button>
-                {this.state.assignedToSelectedItems || "Select multiple..."}
+                {this.state.assignedToSelectedItemsNames || "Select members..."}
               </Button>
             </SelectMenu>
           </div>
@@ -337,12 +486,7 @@ class ViewProjectComponent extends Component {
         >
           Are you sure you want to delete project?
         </Dialog>
-        <SideSheet
-          isShown={this.state.show_project_details}
-          onCloseComplete={() => this.setState({ show_project_details: false })}
-        >
-          <Paragraph margin={40}>Basic Example</Paragraph>
-        </SideSheet>
+
         <div className="container-fluid">
           <div className="row">
             <div className="col-sm-0 nopadding">
@@ -376,6 +520,7 @@ class ViewProjectComponent extends Component {
                             <h6 style={{ color: "#9E9E9E" }}>
                               {this.state.details.category}
                             </h6>
+                            <h6>{this.state.details.summary}</h6>
                           </div>
                         </Col>
                         <Col sm></Col>
@@ -385,22 +530,16 @@ class ViewProjectComponent extends Component {
                               <p>{this.state.details.status}</p>
                             </div>
                             <div style={{ marginTop: "40px" }}>
-                              <h4>{this.state.details.progress} % completed</h4>
+                              <h4>{this.state.projectProgress} % completed</h4>
+                            </div>
+                            <hr />
+                            <div>
+                              <h4>Budget: ₹ 5000 </h4>
                             </div>
                           </div>
                         </Col>
                       </Row>
                       <div>
-                        <Button
-                          marginY={8}
-                          marginRight={12}
-                          iconBefore={ManualIcon}
-                          onClick={() =>
-                            this.setState({ show_project_details: true })
-                          }
-                        >
-                          Details
-                        </Button>
                         <Button
                           marginY={8}
                           marginRight={12}
@@ -412,19 +551,33 @@ class ViewProjectComponent extends Component {
                         <Button
                           marginY={8}
                           marginRight={12}
-                          iconBefore={TrashIcon}
+                          iconBefore={PeopleIcon}
+                        >
+                          Add Team Lead
+                        </Button>
+
+                        <Button
+                          marginY={8}
+                          marginRight={12}
+                          iconBefore={StopIcon}
                           intent="danger"
                           onClick={() =>
                             this.setState({ delete_clicked_first: true })
                           }
                         >
-                          Delete...
+                          Stop Project
                         </Button>
                       </div>
                       <div>
-                        <Badge color="neutral">Python</Badge>
-                        <Badge color="neutral">JavaScript</Badge>
-                        <Badge color="neutral">ReactJs</Badge>
+                        {this.state.technologies.map((technology) => (
+                          <Badge color="neutral">
+                            {technology.technology.name}{" "}
+                            <span>
+                              <RemoveIcon size={12} />{" "}
+                            </span>
+                          </Badge>
+                        ))}
+                        <Badge>{<AddIcon />}</Badge>
                       </div>
 
                       <div className="ViewProjectTopDiv">
@@ -541,19 +694,37 @@ class ViewProjectComponent extends Component {
                                       </p>
                                       <p style={{ fontSize: "14px" }}>
                                         Assigned to:{" "}
-                                        {task.assigned_to.map((user) => (
-                                          <span>{user.first_name}</span>
+                                        {task.assigned_to.map((user, i) => (
+                                          <span>{user.first_name}, </span>
                                         ))}
                                       </p>
                                       <hr />
-                                      <p>Update task progress: </p>
+                                      <p style={{ fontSize: "14px" }}>
+                                        Update task progress:{" "}
+                                      </p>
                                       {this.checkCanUpdateTaskProgress(
                                         this.state.cookies.get("userDetails")
                                           ._id,
                                         task._id
-                                      )
-                                        ? "Can edit"
-                                        : "Cannot edit"}
+                                      ) ? (
+                                        <div>
+                                          <Button
+                                            marginTop={8}
+                                            onClick={() =>
+                                              this.handleTaskProgressUpdateOpen(
+                                                task
+                                              )
+                                            }
+                                          >
+                                            Update Progress
+                                          </Button>
+                                        </div>
+                                      ) : (
+                                        <p style={{ fontSize: "14px" }}>
+                                          You cannot update progress of this
+                                          task.
+                                        </p>
+                                      )}
                                     </div>
 
                                     {/* <div
