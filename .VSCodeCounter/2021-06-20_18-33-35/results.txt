@@ -1,0 +1,62 @@
+Date : 2021-06-20 18:33:35
+Directory : f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business
+Total : 24 files,  41051 codes, 90 comments, 271 blanks, all 41412 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JSON       |          3 |     38,367 |          0 |          3 |     38,370 |
+| JavaScript |         17 |      2,451 |         62 |        198 |      2,711 |
+| CSS        |          1 |        172 |          5 |         36 |        213 |
+| Markdown   |          1 |         38 |          0 |         33 |         71 |
+| HTML       |          1 |         22 |         23 |          1 |         46 |
+| XML        |          1 |          1 |          0 |          0 |          1 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                            | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                               |         24 |     41,051 |         90 |        271 |     41,412 |
+| public                                                                                                                          |          2 |         47 |         23 |          2 |         72 |
+| src                                                                                                                             |         19 |      2,624 |         67 |        234 |      2,925 |
+| src\Components                                                                                                                  |         12 |      2,414 |         55 |        189 |      2,658 |
+| src\Components\Dashboard                                                                                                        |          1 |        202 |          2 |         12 |        216 |
+| src\Components\People                                                                                                           |          1 |        260 |          2 |         18 |        280 |
+| src\Components\PreLogin                                                                                                         |          2 |        407 |          2 |         35 |        444 |
+| src\Components\Projects                                                                                                         |          2 |        927 |         45 |         69 |      1,041 |
+| src\Components\Visits                                                                                                           |          1 |        416 |          3 |         30 |        449 |
+| src\constants                                                                                                                   |          1 |          1 |          0 |          1 |          2 |
++---------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                                                        | language   | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\README.md                                       | Markdown   |         38 |          0 |         33 |         71 |
+| f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\package-lock.json                               | JSON       |     38,293 |          0 |          1 |     38,294 |
+| f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\package.json                                    | JSON       |         49 |          0 |          1 |         50 |
+| f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\public\index.html                               | HTML       |         22 |         23 |          1 |         46 |
+| f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\public\manifest.json                            | JSON       |         25 |          0 |          1 |         26 |
+| f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\App.test.js                                 | JavaScript |          7 |          0 |          2 |          9 |
+| f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\Components\Dashboard\DashboardComponent.js  | JavaScript |        202 |          2 |         12 |        216 |
+| f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\Components\HeaderComponent.js               | JavaScript |         36 |          1 |          3 |         40 |
+| f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\Components\LoadingComponent.js              | JavaScript |         12 |          0 |          3 |         15 |
+| f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\Components\MainComponent.js                 | JavaScript |         38 |          0 |          8 |         46 |
+| f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\Components\People\PeopleComponent.js        | JavaScript |        260 |          2 |         18 |        280 |
+| f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\Components\PreLoginHeader.js                | JavaScript |         16 |          0 |          4 |         20 |
+| f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\Components\PreLogin\LoginComponent.js       | JavaScript |        134 |          1 |         13 |        148 |
+| f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\Components\PreLogin\RegisterComponent.js    | JavaScript |        273 |          1 |         22 |        296 |
+| f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\Components\Projects\ProjectsComponent.js    | JavaScript |        247 |          1 |         18 |        266 |
+| f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\Components\Projects\ViewProjectComponent.js | JavaScript |        680 |         44 |         51 |        775 |
+| f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\Components\SidebarComponent.js              | JavaScript |        100 |          0 |          7 |        107 |
+| f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\Components\Visits\VisitsComponent.js        | JavaScript |        416 |          3 |         30 |        449 |
+| f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\constants\variables.js                      | JavaScript |          1 |          0 |          1 |          2 |
+| f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\index.css                                   | CSS        |        172 |          5 |         36 |        213 |
+| f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\index.js                                    | JavaScript |         16 |          3 |          3 |         22 |
+| f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\logo.svg                                    | XML        |          1 |          0 |          0 |          1 |
+| f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\reportWebVitals.js                          | JavaScript |         12 |          0 |          2 |         14 |
+| f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\setupTests.js                               | JavaScript |          1 |          4 |          1 |          6 |
+| Total                                                                                                                           |            |     41,051 |         90 |        271 |     41,412 |
++---------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

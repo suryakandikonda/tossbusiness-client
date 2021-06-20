@@ -5,6 +5,7 @@ import {
   IoPeopleCircleOutline,
   IoLocationOutline,
   IoCalculatorOutline,
+  IoStatsChartOutline
 } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
@@ -26,7 +27,7 @@ class SidebarComponent extends Component {
               <img src={TossLogo} className="img-fluid" />
             </div>
             <div className="SidePanelItemsDiv">
-              <Link to="/home" id="NoHoverLink">
+              <Link to="/dashboard" id="NoHoverLink">
                 <div
                   className="SidePanelItem"
                   id={
@@ -35,9 +36,9 @@ class SidebarComponent extends Component {
                       : ""
                   }
                 >
-                  <IoHomeOutline size={40} />
+                  <IoStatsChartOutline size={40} />
 
-                  <p>Home</p>
+                  <p>Dashboard</p>
                 </div>
               </Link>
               <Link to="/projects" id="NoHoverLink">

@@ -21,6 +21,10 @@ import { SERVER_URL } from "../../constants/variables";
 import HeaderComponent from "../HeaderComponent";
 import SidebarComponent from "../SidebarComponent";
 
+import { TossLogoBase64 } from "../../constants/strings";
+
+import TossLogo from "../../assets/TossLogo.png";
+
 class VisitsComponent extends Component {
   constructor(props) {
     super(props);
@@ -64,6 +68,35 @@ class VisitsComponent extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
+  deleteVisitAPI = (id) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      visitId: id,
+    });
+
+    var requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(SERVER_URL + "/visit/delete", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if (result.success) {
+          toaster.success("Visit entry deleted");
+        } else {
+          toaster.danger("Something went wrong. Please try again.");
+        }
+        this.getVisits();
+      })
+      .catch((error) => console.log("error", error));
+  };
+
   downloadPDF = () => {
     toaster.notify("Downloading PDF...");
     var tableColumns = [
@@ -97,10 +130,21 @@ class VisitsComponent extends Component {
     var dd = {
       content: [
         {
-          text: "Date: " + moment().format("DD MMM, YYYY"),
-          bold: true,
-          alignment: "right",
+          alignment: "justify",
+          columns: [
+            {
+              image: TossLogoBase64,
+              width: 100,
+              height: 50,
+            },
+            {
+              text: "Date: " + moment().format("DD MMM, YYYY"),
+              bold: true,
+              alignment: "right",
+            },
+          ],
         },
+
         {
           text: "Visits Report",
           alignment: "center",
@@ -127,7 +171,16 @@ class VisitsComponent extends Component {
         },
       ],
     };
-    window.pdfMake.createPdf(dd).download("VisitsReport" + Date.now() + ".pdf");
+    window.pdfMake
+      .createPdf(dd)
+      .download(
+        "VisitsReport " +
+          this.state.userDetails.first_name +
+          " " +
+          this.state.userDetails.last_name +
+          Date.now() +
+          ".pdf"
+      );
   };
 
   getVisits = () => {
@@ -403,10 +456,10 @@ class VisitsComponent extends Component {
                             </Table.TextHeaderCell>
                             <Table.TextHeaderCell>Actions</Table.TextHeaderCell>
                           </Table.Head>
-                          <Table.Body height={240}>
+                          <Table.Body>
                             {this.state.data.length > 0 &&
                               this.state.data.map((item) => (
-                                <Table.Row isSelectable>
+                                <Table.Row>
                                   <Table.TextCell>{item.name}</Table.TextCell>
                                   <Table.TextCell>
                                     {item.contact_person_type}
@@ -426,7 +479,11 @@ class VisitsComponent extends Component {
                                     )}
                                   </Table.TextCell>
                                   <Table.TextCell>
-                                    <TrashIcon />
+                                    <TrashIcon
+                                      onClick={() =>
+                                        this.deleteVisitAPI(item._id)
+                                      }
+                                    />
                                   </Table.TextCell>
                                 </Table.Row>
                               ))}

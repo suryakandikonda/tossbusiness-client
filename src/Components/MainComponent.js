@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Redirect, Route, Switch } from "react-router";
+import DashboardComponent from "./Dashboard/DashboardComponent";
 import PeopleComponent from "./People/PeopleComponent";
 import LoginComponent from "./PreLogin/LoginComponent";
 import RegisterComponent from "./PreLogin/RegisterComponent";
@@ -14,6 +15,10 @@ class MainComponent extends Component {
         <Switch>
           <Route path="/login" component={LoginComponent} />
           <Route path="/register" component={RegisterComponent} />
+          {/* Home */}
+          <Route path="/dashboard" component={DashboardComponent} />
+
+          {/* Projects */}
           <Route path="/projects" component={ProjectsComponent} />
 
           <Route

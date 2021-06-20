@@ -1,6 +1,12 @@
 import { Avatar, SettingsIcon } from "evergreen-ui";
 import React, { Component } from "react";
-import { IoSettings } from "react-icons/io5";
+import {
+  IoBookOutline,
+  IoSettings,
+  IoFolderOpenOutline,
+  IoDocumentTextOutline,
+  IoNewspaperOutline,
+} from "react-icons/io5";
 import { Col, Container, Row } from "reactstrap";
 
 class HeaderComponent extends Component {
@@ -11,7 +17,20 @@ class HeaderComponent extends Component {
           <Container>
             <Row>
               <Col sm>
-                <div></div>
+                <Row>
+                  <Col sm className="nopadding">
+                    <div style={{ textAlign: "center", paddingTop: "10px" }}>
+                      <IoDocumentTextOutline size={24} />
+                      <h6>Notes</h6>
+                    </div>
+                  </Col>
+                  <Col sm className="nopadding">
+                    <div style={{ textAlign: "center", paddingTop: "10px" }}>
+                      <IoNewspaperOutline size={24} />
+                      <h6>Posts</h6>
+                    </div>
+                  </Col>
+                </Row>
               </Col>
               <Col sm>
                 <div className="HeaderItemDiv" style={{ textAlign: "center" }}>
