@@ -70,14 +70,12 @@ class LoginComponent extends Component {
           this.setState({
             login_clicked: false,
           });
-          if (result.user.company !== null) {
-            get("Notes" + result.user._id).then((val) => {
-              if (val === undefined) {
-                set("Notes" + result.user._id, []);
-              }
-              window.location.href = "/projects";
-            });
-          } else toaster.notify("Client page coming soon");
+          get("Notes" + result.user._id).then((val) => {
+            if (val === undefined) {
+              set("Notes" + result.user._id, []);
+            }
+            window.location.href = "/projects";
+          });
         } else {
           this.setState({
             login_clicked: false,

@@ -25,6 +25,8 @@ import SidebarComponent from "../SidebarComponent";
 
 import { Bar, Doughnut } from "react-chartjs-2";
 import BottomBarMobileComponent from "../BottomBarMobileComponent";
+import { validateLogin } from "../../constants/functions";
+import LoadingComponent from "../LoadingComponent";
 
 class DashboardComponent extends Component {
   constructor(props) {
@@ -32,6 +34,13 @@ class DashboardComponent extends Component {
     this.state = {
       cookies: new Cookies(),
       userDetails: "",
+      isLoading: true,
+
+      //
+      projects: [],
+      employees: [],
+      clients: [],
+      projectsWorth: 0,
 
       //Tech Stat
       techData: {
@@ -113,7 +122,64 @@ class DashboardComponent extends Component {
     });
   }
 
+  getDashboardDetails = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("company", this.state.cookies.get("userDetails").company);
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(SERVER_URL + "/company/dashboard", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if (result.success) {
+          var projects = result.data.projects;
+          var clients = [];
+          var projectsWorth = 0;
+          projects.forEach((item) => {
+            if (!clients.includes(item.client._id)) {
+              clients.push(item.client._id);
+            }
+            if (item.budget !== undefined) projectsWorth += Number(item.budget);
+          });
+          this.setState({
+            projects: result.data.projects,
+            employees: result.data.employees,
+            clients: clients,
+            projectsWorth: projectsWorth,
+            isLoading: false,
+          });
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  componentDidMount() {
+    validateLogin
+      .then((res) => {
+        this.setState({
+          userDetails: this.state.cookies.get("userDetails"),
+        });
+        if (this.state.cookies.get("userDetails").role >= 3)
+          this.getDashboardDetails();
+      })
+      .catch((err) => {
+        window.location.href = "/login";
+      });
+  }
+
   render() {
+    if (this.state.isLoading) {
+      return (
+        <React.Fragment>
+          <LoadingComponent />
+        </React.Fragment>
+      );
+    }
     return (
       <React.Fragment>
         <div className="container-fluid">
@@ -143,7 +209,7 @@ class DashboardComponent extends Component {
                               <br />
                               <br />
                               <h6 style={{ color: "#9E9E9E" }}>Projects</h6>
-                              <h4>20</h4>
+                              <h4>{this.state.projects.length}</h4>
                             </div>
                           </Col>
                           <Col sm xs="5" className="DashboardTopDivItem">
@@ -154,7 +220,7 @@ class DashboardComponent extends Component {
                               <h6 style={{ color: "#9E9E9E" }}>
                                 People in organization
                               </h6>
-                              <h4>85</h4>
+                              <h4>{this.state.employees.length}</h4>
                             </div>
                           </Col>
                           <Col sm xs="5" className="DashboardTopDivItem">
@@ -163,7 +229,7 @@ class DashboardComponent extends Component {
                               <br />
                               <br />
                               <h6 style={{ color: "#9E9E9E" }}>Clients</h6>
-                              <h4>40</h4>
+                              <h4>{this.state.clients.length}</h4>
                             </div>
                           </Col>
                           <Col sm xs="5" className="DashboardTopDivItem">
@@ -174,7 +240,7 @@ class DashboardComponent extends Component {
                               <h6 style={{ color: "#9E9E9E" }}>
                                 Projects worth
                               </h6>
-                              <h4>₹ 3000</h4>
+                              <h4>₹ {this.state.projectsWorth}</h4>
                             </div>
                           </Col>
                         </Row>

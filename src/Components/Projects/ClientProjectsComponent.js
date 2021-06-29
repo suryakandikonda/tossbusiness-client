@@ -12,7 +12,7 @@ import HeaderComponent from "../HeaderComponent";
 import LoadingComponent from "../LoadingComponent";
 import SidebarComponent from "../SidebarComponent";
 
-class ProjectsComponent extends Component {
+class ClientProjectsComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -53,17 +53,12 @@ class ProjectsComponent extends Component {
   componentDidMount() {
     var userDetails = this.state.cookies.get("userDetails");
 
-    if (userDetails.role >= 3) {
-      this.getProjectByCompnayID();
-    }
-    if (userDetails.role === 2) {
-      window.location.href = "/clientprojects";
-    }
+    this.getProjectByClientID();
   }
 
-  getProjectByCompnayID = () => {
+  getProjectByClientID = () => {
     var myHeaders = new Headers();
-    myHeaders.append("company", this.state.cookies.get("userDetails").company);
+    myHeaders.append("client", this.state.cookies.get("userDetails")._id);
 
     var requestOptions = {
       method: "GET",
@@ -71,7 +66,7 @@ class ProjectsComponent extends Component {
       redirect: "follow",
     };
 
-    fetch(SERVER_URL + "/project/getProjectsByCompanyID", requestOptions)
+    fetch(SERVER_URL + "/project/getProjectsByClientID", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
@@ -123,7 +118,7 @@ class ProjectsComponent extends Component {
                   <div className="PageMainDiv">
                     <div className="PageMainDivContent">
                       <h2>
-                        <b>Projects</b>
+                        <b>Projects assigned by you</b>
                         <span style={{ float: "right" }}>
                           <Tooltip content="Create Project">
                             <IoAddOutline />
@@ -275,4 +270,4 @@ class ProjectsComponent extends Component {
   }
 }
 
-export default ProjectsComponent;
+export default ClientProjectsComponent;

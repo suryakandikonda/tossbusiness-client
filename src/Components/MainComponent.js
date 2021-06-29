@@ -10,6 +10,7 @@ import ViewProjectComponent from "./Projects/ViewProjectComponent";
 import VisitsComponent from "./Visits/VisitsComponent";
 import BottomBarMobileComponent from "./BottomBarMobileComponent";
 import HomeComponent from "./HomeComponent";
+import ClientProjectsComponent from "./Projects/ClientProjectsComponent";
 
 class MainComponent extends Component {
   render() {
@@ -25,6 +26,7 @@ class MainComponent extends Component {
 
           {/* Projects */}
           <Route path="/projects" component={ProjectsComponent} />
+          <Route path="/clientprojects" component={ClientProjectsComponent} />
 
           <Route
             exact

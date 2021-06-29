@@ -35,6 +35,8 @@ import HeaderComponent from "../HeaderComponent";
 import SidebarComponent from "../SidebarComponent";
 
 import ReactStars from "react-rating-stars-component";
+import { validateLogin } from "../../constants/functions";
+import LoadingComponent from "../LoadingComponent";
 
 class ViewProjectComponent extends Component {
   constructor(props) {
@@ -49,6 +51,7 @@ class ViewProjectComponent extends Component {
       details: {},
       tasks: [],
       technologies: [],
+      clientDetails: {},
       allTechnologies: [],
       projectProgress: 0,
       isLoading: true,
@@ -482,11 +485,13 @@ class ViewProjectComponent extends Component {
             progress = parseInt(progress / tasks.length);
           }
           this.setState({
+            isLoading: false,
             details: result.data,
             tasks: result.data.tasks,
             technologies: result.data.technologies,
             projectProgress: progress,
             newProjectStatus: result.data.status,
+            clientDetails: result.data.client,
             teamLead:
               result.data.team_lead == null ? null : result.data.team_lead._id,
           });
@@ -641,11 +646,27 @@ class ViewProjectComponent extends Component {
   };
 
   componentDidMount() {
-    this.getProjectDetails();
-    this.getCompanyEmployees();
-    this.getAllTechnologies();
+    validateLogin
+      .then((res) => {
+        this.setState({
+          userDetails: this.state.cookies.get("userDetails"),
+        });
+        this.getProjectDetails();
+        this.getCompanyEmployees();
+        this.getAllTechnologies();
+      })
+      .catch((err) => {
+        window.location.href = "/login";
+      });
   }
   render() {
+    if (this.state.isLoading) {
+      return (
+        <React.Fragment>
+          <LoadingComponent />
+        </React.Fragment>
+      );
+    }
     return (
       <React.Fragment>
         {/* Give rating Dialog */}
@@ -1059,15 +1080,19 @@ class ViewProjectComponent extends Component {
                             <h6 style={{ wordWrap: "break-word" }}>
                               {this.state.details.summary}
                             </h6>
-                            <br />
-                            <h6>
-                              Team Lead:{" "}
-                              {this.state.details.team_lead == null
-                                ? "No Team Lead"
-                                : this.state.details.team_lead.first_name +
-                                  " " +
-                                  this.state.details.team_lead.last_name}
-                            </h6>
+                            {this.state.userDetails.role >= 3 && (
+                              <>
+                                <br />
+                                <h6>
+                                  Team Lead:{" "}
+                                  {this.state.details.team_lead == null
+                                    ? "No Team Lead"
+                                    : this.state.details.team_lead.first_name +
+                                      " " +
+                                      this.state.details.team_lead.last_name}
+                                </h6>
+                              </>
+                            )}
                           </div>
                         </Col>
 
@@ -1079,75 +1104,100 @@ class ViewProjectComponent extends Component {
                             <div style={{ marginTop: "40px" }}>
                               <h4>{this.state.projectProgress} % Completed</h4>
                             </div>
-                            <hr />
-                            <div>
-                              <h4>Budget: ₹ {this.state.details.budget} </h4>
-                            </div>
-                            <hr />
-                            {this.state.details.client !== undefined ||
-                              this.state.details.client !== null ||
-                              (Object.keys(this.state.details).length !== 0 && (
+                            {this.state.clientDetails._id ===
+                              this.state.userDetails._id ||
+                            this.state.userDetails.role === 3 ? (
+                              <>
+                                <hr />
+                                <div>
+                                  <h4>
+                                    Budget: ₹ {this.state.details.budget}{" "}
+                                  </h4>
+                                </div>
+                              </>
+                            ) : (
+                              <></>
+                            )}
+                            {/* <hr />
+                            {this.state.clientDetails !== undefined ||
+                              (this.state.clientDetails !== null && (
                                 <div>
                                   <h6>
                                     <b>Client details:</b>{" "}
                                   </h6>
-                                  <p>{this.state.details.client.first_name}</p>
+                                  <p>{this.state.clientDetails.first_name}</p>
                                   <p>8-129, Hanuman Junction</p>
                                   <p>7306374787</p>
                                   <p>suryasaikandikonda@gmail.com</p>
                                 </div>
-                              ))}
+                              ))} */}
                           </div>
                         </Col>
                       </Row>
                       <div>
-                        <Button
-                          marginY={8}
-                          marginRight={12}
-                          iconBefore={EditIcon}
-                          onClick={this.handleEditProjectOpen}
-                        >
-                          Edit
-                        </Button>
+                        {this.state.clientDetails._id ===
+                          this.state.userDetails._id && (
+                          <Button
+                            marginY={8}
+                            marginRight={12}
+                            iconBefore={EditIcon}
+                            onClick={this.handleEditProjectOpen}
+                          >
+                            Edit
+                          </Button>
+                        )}
 
-                        <Button
-                          marginY={8}
-                          marginRight={12}
-                          iconBefore={PeopleIcon}
-                          onClick={() =>
-                            this.setState({
-                              update_team_lead_first_clicked: true,
-                            })
-                          }
-                        >
-                          Update Team Lead
-                        </Button>
+                        {this.state.userDetails.role === 3 && (
+                          <Button
+                            marginY={8}
+                            marginRight={12}
+                            iconBefore={PeopleIcon}
+                            onClick={() =>
+                              this.setState({
+                                update_team_lead_first_clicked: true,
+                              })
+                            }
+                          >
+                            Update Team Lead
+                          </Button>
+                        )}
 
-                        <Button
-                          marginY={8}
-                          marginRight={12}
-                          iconBefore={StopIcon}
-                          onClick={() =>
-                            this.setState({ change_status_first_clicked: true })
-                          }
-                        >
-                          Change Project Status
-                        </Button>
+                        {this.state.clientDetails._id ===
+                          this.state.userDetails._id && (
+                          <Button
+                            marginY={8}
+                            marginRight={12}
+                            iconBefore={StopIcon}
+                            onClick={() =>
+                              this.setState({
+                                change_status_first_clicked: true,
+                              })
+                            }
+                          >
+                            Change Project Status
+                          </Button>
+                        )}
 
-                        <Button
-                          marginY={8}
-                          marginRight={12}
-                          onClick={() => this.handleUpdateTechnologiesOpen()}
-                        >
-                          Update Technologies
-                        </Button>
-                        <Button
-                          marginY={8}
-                          marginRight={12}
-                          onClick={() => this.handleGiveRatingOpen()}
-                        >
-                          Give Rating
-                        </Button>
+                        {this.state.userDetails.role === 3 && (
+                          <Button
+                            marginY={8}
+                            marginRight={12}
+                            onClick={() => this.handleUpdateTechnologiesOpen()}
+                          >
+                            Update Technologies
+                          </Button>
+                        )}
+
+                        {this.state.clientDetails._id ===
+                          this.state.userDetails._id && (
+                          <Button
+                            marginY={8}
+                            marginRight={12}
+                            onClick={() => this.handleGiveRatingOpen()}
+                          >
+                            Give Rating
+                          </Button>
+                        )}
                       </div>
                       <div>
                         <p>Technologies: </p>
@@ -1207,14 +1257,29 @@ class ViewProjectComponent extends Component {
                         <div className="ViewProjectsOpenTasksTitle">
                           <h3>Open Tasks</h3>
                         </div>
-                        <Button
-                          marginY={8}
-                          marginRight={12}
-                          iconBefore={AddIcon}
-                          onClick={this.handleCreateTaskModalOpen}
-                        >
-                          Create New Task
-                        </Button>
+                        {this.state.userDetails.role === 3 && (
+                          <Button
+                            marginY={8}
+                            marginRight={12}
+                            iconBefore={AddIcon}
+                            onClick={this.handleCreateTaskModalOpen}
+                          >
+                            Create New Task
+                          </Button>
+                        )}
+
+                        {this.state.details.team_lead !== null &&
+                          this.state.details.team_lead._id ===
+                            this.state.userDetails._id && (
+                            <Button
+                              marginY={8}
+                              marginRight={12}
+                              iconBefore={AddIcon}
+                              onClick={this.handleCreateTaskModalOpen}
+                            >
+                              Create New Task
+                            </Button>
+                          )}
 
                         <div className="ViewProjectsOpenTasksItemsMainDiv">
                           <Row>

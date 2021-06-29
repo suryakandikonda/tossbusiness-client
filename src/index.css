@@ -302,5 +302,22 @@ p {
   padding: 20px;
   border-radius: 4px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  margin-bottom: 30px;
+  margin-bottom: 80px;
+}
+
+.HomeListingMainDiv {
+  margin-top: 40px;
+}
+
+.HomeListingItemDiv {
+  margin-top: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  border: 1px solid #E0F7FA;
+  transition: 0.5s;
+}
+
+.HomeListingItemDiv:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
