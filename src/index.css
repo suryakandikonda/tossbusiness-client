@@ -63,6 +63,11 @@ p {
   display: inline-block;
 }
 
+#BottomBarItemSelected {
+  display: inline-block;
+  color: #01579b !important;
+}
+
 .HeaderMainDiv {
   background-color: #f3f6fd;
   width: 100%;
@@ -109,6 +114,13 @@ p {
   margin-right: 20px;
 }
 
+@media (max-width: 600px) {
+  .PageMainDivContent {
+    border-radius: 0px;
+    margin-right: 5px;
+  }
+}
+
 .ProjectsTopDiv {
   margin-top: 40px;
 }
@@ -124,6 +136,7 @@ p {
   border-radius: 20px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
+  margin-top: 30px;
 }
 
 .ProjectsItemDiv:hover {
@@ -203,10 +216,91 @@ p {
   margin-top: 30px;
 }
 
+@media (max-width: 600px) {
+  .DashboardTopDivItem {
+    margin: 4px;
+  }
+}
+
 .DashboardTopDiv {
   margin-top: 20px;
 }
 
 .DashboardSecondDiv {
   margin-top: 40px;
+}
+
+.CreateNotesTextArea {
+  width: 100%;
+  height: 180px;
+  outline: none;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.NotesItemsMainDiv {
+  margin-top: 40px;
+}
+
+.NotesItem {
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  min-height: 200px;
+}
+
+.BottomBarMobileMainDiv {
+  position: fixed;
+  bottom: 0;
+  background-color: #baf3d2;
+}
+
+.BottomBarMobileItem {
+  text-align: center;
+  padding: 4px;
+}
+
+/* Bottom Bar */
+.navbar {
+  border-bottom: solid 1px #ebebeb;
+  background-color: white;
+}
+.bottom-tab-nav {
+  border-top: solid 1px #ebebeb;
+}
+.nav-link,
+.bottom-nav-link {
+  text-align: center;
+  color: #55575b;
+}
+.bottom-nav-link.active {
+  color: #922c88;
+}
+.bottom-tab-label {
+  font-size: 12px;
+}
+
+.HeaderMobileMainDiv {
+  background-color: white;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 4px;
+  text-align: center;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.HomeMainDiv {
+}
+
+.HomeBackImage {
+  background-image: url("./assets/homeback.jpg");
+  height: 400px;
+}
+
+.HomeDiv {
+  margin-top: -160px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  margin-bottom: 30px;
 }

@@ -24,6 +24,7 @@ import HeaderComponent from "../HeaderComponent";
 import SidebarComponent from "../SidebarComponent";
 
 import { Bar, Doughnut } from "react-chartjs-2";
+import BottomBarMobileComponent from "../BottomBarMobileComponent";
 
 class DashboardComponent extends Component {
   constructor(props) {
@@ -136,7 +137,7 @@ class DashboardComponent extends Component {
 
                       <div className="DashboardTopDiv">
                         <Row>
-                          <Col sm className="DashboardTopDivItem">
+                          <Col sm xs="5" className="DashboardTopDivItem">
                             <div>
                               <IoLaptopOutline size={60} />
                               <br />
@@ -145,7 +146,7 @@ class DashboardComponent extends Component {
                               <h4>20</h4>
                             </div>
                           </Col>
-                          <Col sm className="DashboardTopDivItem">
+                          <Col sm xs="5" className="DashboardTopDivItem">
                             <div>
                               <IoBusinessOutline size={60} />
                               <br />
@@ -156,7 +157,7 @@ class DashboardComponent extends Component {
                               <h4>85</h4>
                             </div>
                           </Col>
-                          <Col sm className="DashboardTopDivItem">
+                          <Col sm xs="5" className="DashboardTopDivItem">
                             <div>
                               <IoPeopleOutline size={60} />
                               <br />
@@ -165,7 +166,7 @@ class DashboardComponent extends Component {
                               <h4>40</h4>
                             </div>
                           </Col>
-                          <Col sm className="DashboardTopDivItem">
+                          <Col sm xs="5" className="DashboardTopDivItem">
                             <div>
                               <IoCalculatorOutline size={60} />
                               <br />
@@ -206,6 +207,9 @@ class DashboardComponent extends Component {
               </div>
             </div>
           </div>
+        </div>
+        <div className="d-block d-sm-none">
+          <BottomBarMobileComponent selected="dashboard" />
         </div>
       </React.Fragment>
     );

@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { Row, Col } from "reactstrap";
 import Cookies from "universal-cookie/es6";
 import { SERVER_URL } from "../../constants/variables";
+import BottomBarMobileComponent from "../BottomBarMobileComponent";
 import HeaderComponent from "../HeaderComponent";
 import LoadingComponent from "../LoadingComponent";
 import SidebarComponent from "../SidebarComponent";
@@ -51,7 +52,7 @@ class ProjectsComponent extends Component {
   componentDidMount() {
     var userDetails = this.state.cookies.get("userDetails");
 
-    if (userDetails.role >=3 ) {
+    if (userDetails.role >= 3) {
       this.getProjectByCompnayID();
     }
   }
@@ -127,7 +128,7 @@ class ProjectsComponent extends Component {
                       </h2>
                       <div className="ProjectsTopDiv">
                         <Row>
-                          <Col sm>
+                          <Col sm xs="6">
                             <div>
                               <h4>
                                 <b>{this.state.onGoingProjects.length}</b>
@@ -135,7 +136,7 @@ class ProjectsComponent extends Component {
                               <p>Ongoing</p>
                             </div>
                           </Col>
-                          <Col sm>
+                          <Col sm xs="6">
                             <div>
                               <h4>
                                 <b>{this.state.completedProjects.length}</b>
@@ -143,7 +144,7 @@ class ProjectsComponent extends Component {
                               <p>Completed</p>
                             </div>
                           </Col>
-                          <Col sm>
+                          <Col sm xs>
                             <div>
                               <h4>
                                 <b>{this.state.stoppedProjects.length}</b>
@@ -151,7 +152,7 @@ class ProjectsComponent extends Component {
                               <p>Stopped</p>
                             </div>
                           </Col>
-                          <Col sm>
+                          <Col sm xs>
                             <div>
                               <h4>
                                 <b>{this.state.data.length}</b>
@@ -256,6 +257,9 @@ class ProjectsComponent extends Component {
               </div>
             </div>
           </div>
+        </div>
+        <div className="d-block d-sm-none">
+          <BottomBarMobileComponent selected="projects" />
         </div>
       </React.Fragment>
     );

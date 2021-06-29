@@ -20,16 +20,21 @@ import {
   StopIcon,
   RadioGroup,
   Select,
+  StarEmptyIcon,
+  StarIcon,
 } from "evergreen-ui";
 import moment from "moment";
 import React, { Component } from "react";
 import { IoArrowBackOutline, IoPencil } from "react-icons/io5";
 import { Col, Row, Input } from "reactstrap";
 import Cookies from "universal-cookie/es6";
+import { projectCategories } from "../../constants/projectCategories";
 import { SERVER_URL } from "../../constants/variables";
 
 import HeaderComponent from "../HeaderComponent";
 import SidebarComponent from "../SidebarComponent";
+
+import ReactStars from "react-rating-stars-component";
 
 class ViewProjectComponent extends Component {
   constructor(props) {
@@ -44,6 +49,7 @@ class ViewProjectComponent extends Component {
       details: {},
       tasks: [],
       technologies: [],
+      allTechnologies: [],
       projectProgress: 0,
       isLoading: true,
       show_project_details: false,
@@ -81,9 +87,120 @@ class ViewProjectComponent extends Component {
       teamLead: "",
       update_team_lead_first_clicked: false,
       update_team_lead_second_clicked: false,
+
+      //
+      edit_project_first_clicked: false,
+      edit_project_second_clicked: false,
+      newName: "",
+      newSummary: "",
+      newCategory: "",
+      newStartDate: "",
+      newEndDate: "",
+      newBudget: "",
+
+      //
+      update_technologies_first_clicked: false,
+      update_technologies_second_clicked: false,
+
+      //
+      give_rating_first_clicked: false,
     };
     this.handleInputChange = this.handleInputChange.bind(this);
   }
+
+  handleGiveRatingOpen = () => {
+    this.setState({
+      give_rating_first_clicked: true,
+    });
+  };
+
+  handleGiveRatingClose = () => {
+    this.setState({
+      give_rating_first_clicked: false,
+    });
+  };
+
+  handleUpdateTechnologiesOpen = () => {
+    var arr = this.state.allTechnologies;
+    var newArr = [];
+
+    arr.forEach((item) => {
+      this.state.technologies.forEach((tech) => {});
+    });
+
+    this.setState({
+      update_technologies_first_clicked: true,
+    });
+  };
+
+  handleUpdateTechnologiesClose = () => {
+    this.setState({
+      update_technologies_first_clicked: false,
+      update_technologies_second_clicked: false,
+    });
+    this.getProjectDetails();
+  };
+
+  handleEditProjectOpen = () => {
+    this.setState({
+      edit_project_first_clicked: true,
+      newName: this.state.details.name,
+      newSummary: this.state.details.summary,
+      newCategory: this.state.details.category,
+      newStartDate: moment(this.state.details.start_date).format("YYYY-MM-DD"),
+      newEndDate: moment(this.state.details.end_date).format("YYYY-MM-DD"),
+      newBudget: this.state.details.budget,
+    });
+  };
+
+  handleEditProjectClose = () => {
+    this.setState({
+      edit_project_first_clicked: false,
+      edit_project_second_clicked: false,
+      newName: "",
+      newSummary: "",
+      newCategory: "",
+      newStartDate: "",
+      newEndDate: "",
+      newBudget: "",
+    });
+    this.getProjectDetails();
+  };
+
+  editProjectAPI = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("project", this.state.project);
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      name: this.state.newName,
+      category: this.state.newCategory,
+      summary: this.state.newSummary,
+      start_date: new Date(this.state.newStartDate).toISOString(),
+      end_date: new Date(this.state.newEndDate).toISOString(),
+      budget: this.state.newBudget,
+    });
+
+    var requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(SERVER_URL + "/project/updateProject", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if (result.success) {
+          toaster.success("Project Updated Successfully");
+          this.handleEditProjectClose();
+        } else {
+          toaster.danger("Something went wrong. Please try again");
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
 
   updateTeamLeadAPI = () => {
     this.setState({
@@ -378,6 +495,25 @@ class ViewProjectComponent extends Component {
       .catch((error) => console.log("error", error));
   };
 
+  getAllTechnologies = () => {
+    var requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
+
+    fetch(SERVER_URL + "/technology/get", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if (result.success) {
+          this.setState({
+            allTechnologies: result.data,
+          });
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
+
   getCompanyEmployees = () => {
     var myHeaders = new Headers();
     myHeaders.append("company", "60c5bd6a019bbe414c768da4");
@@ -413,13 +549,254 @@ class ViewProjectComponent extends Component {
       .catch((error) => console.log("error", error));
   };
 
+  deleteTechnologyFromProject = (id) => {
+    var myHeaders = new Headers();
+    myHeaders.append("project", this.state.project);
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      technologyId: id,
+    });
+
+    var requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(SERVER_URL + "/project/deleteTechnology", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if (result.success) {
+          toaster.success("Technology removed from Project");
+          this.getProjectDetails();
+        } else {
+          toaster.danger("Something went wrong. Please try again");
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  addTechnologyToProject = (id) => {
+    var myHeaders = new Headers();
+    myHeaders.append("project", this.state.project);
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      technology: id,
+    });
+
+    var requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(SERVER_URL + "/project/addTechnology", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if (result.success) {
+          toaster.success("Technology added into Project");
+          this.getProjectDetails();
+        } else {
+          toaster.danger("Something went wrong. Please Try again");
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  rateTechnologyAPI = (rating, id) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      project: this.state.project,
+      technologyId: id,
+      rating: rating,
+    });
+
+    var requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(SERVER_URL + "/project/rateTechnology", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if (result.success) {
+          toaster.success("Rated Technology Successfully");
+          this.getProjectDetails();
+        } else {
+          toaster.danger("Something went wrong. Please Try again");
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
+
   componentDidMount() {
     this.getProjectDetails();
     this.getCompanyEmployees();
+    this.getAllTechnologies();
   }
   render() {
     return (
       <React.Fragment>
+        {/* Give rating Dialog */}
+        <Dialog
+          isShown={this.state.give_rating_first_clicked}
+          title="Give Rating"
+          hasFooter={false}
+          onCloseComplete={this.handleGiveRatingClose}
+        >
+          <div>
+            <p>Give rating for Technologies: </p>
+            <br />
+            {this.state.technologies.map((technology) => (
+              <div>
+                <h6>
+                  {technology.technology.name}{" "}
+                  <span style={{ marginLeft: "10px" }}>
+                    <ReactStars
+                      count={5}
+                      onChange={(rating) =>
+                        this.rateTechnologyAPI(rating, technology._id)
+                      }
+                      value={technology.rating}
+                      size={24}
+                      emptyIcon={<StarEmptyIcon />}
+                      fullIcon={<StarIcon />}
+                      activeColor="#ffd700"
+                    />
+                  </span>
+                </h6>
+                <hr />
+              </div>
+            ))}
+            <br />
+          </div>
+        </Dialog>
+        {/* Update Technologies */}
+        <Dialog
+          isShown={this.state.update_technologies_first_clicked}
+          title="Update Technologies"
+          onCloseComplete={this.handleUpdateTechnologiesClose}
+          hasFooter={false}
+        >
+          <div>
+            <p>Technologies used in this project: </p>
+            {this.state.technologies.map((technology) => (
+              <Badge color="neutral">
+                {technology.technology.name}{" "}
+                <span>
+                  <RemoveIcon
+                    size={12}
+                    onClick={() =>
+                      this.deleteTechnologyFromProject(technology._id)
+                    }
+                  />{" "}
+                </span>
+              </Badge>
+            ))}
+            <hr />
+
+            <p>Add Technology to Project: </p>
+            <br />
+            <div>
+              <Select
+                onChange={(event) => {
+                  this.addTechnologyToProject(event.target.value);
+                }}
+              >
+                {this.state.allTechnologies.map((item) => (
+                  <option value={item._id}>{item.name}</option>
+                ))}
+              </Select>
+            </div>
+            <br />
+          </div>
+        </Dialog>
+
+        {/* Edit Project Dialog */}
+        <Dialog
+          isShown={this.state.edit_project_first_clicked}
+          title="Edit Project"
+          onCloseComplete={this.handleEditProjectClose}
+          confirmLabel="Update"
+          onConfirm={() => this.editProjectAPI()}
+        >
+          <div>
+            <TextInput
+              placeholder="Project Name"
+              name="newName"
+              onChange={this.handleInputChange}
+              value={this.state.newName}
+              width="100%"
+            />
+            <br />
+            <br />
+            <Select
+              value={this.state.newCategory}
+              onChange={(event) => {
+                this.setState({ newCategory: event.target.value });
+              }}
+            >
+              {projectCategories.map((item) => (
+                <option value={item}>{item}</option>
+              ))}
+            </Select>
+            <br />
+            <br />
+            <Textarea
+              placeholder="Project Summary"
+              name="newSummary"
+              onChange={this.handleInputChange}
+              value={this.state.newSummary}
+            />
+            <br />
+            <br />
+            <Row>
+              <Col sm>
+                <div>
+                  <p>Start date:</p>
+                  <Input
+                    type="date"
+                    name="newStartDate"
+                    onChange={this.handleInputChange}
+                    value={this.state.newStartDate}
+                  />
+                </div>
+              </Col>
+
+              <Col sm>
+                <div>
+                  <p>End date:</p>
+                  <Input
+                    type="date"
+                    name="newEndDate"
+                    onChange={this.handleInputChange}
+                    value={this.state.newEndDate}
+                  />
+                </div>
+              </Col>
+            </Row>
+            <br />
+            <br />
+            <TextInput
+              placeholder="Project Budget"
+              name="newBudget"
+              onChange={this.handleInputChange}
+              value={this.state.newBudget}
+              width="100%"
+            />
+          </div>
+        </Dialog>
         {/* Update Team Lead */}
         <Dialog
           isShown={this.state.update_team_lead_first_clicked}
@@ -668,7 +1045,10 @@ class ViewProjectComponent extends Component {
                         <Col sm>
                           <div>
                             <h2
-                              style={{ marginTop: "40px" }}
+                              style={{
+                                marginTop: "40px",
+                                wordWrap: "break-word",
+                              }}
                               className="display-4"
                             >
                               <b>{this.state.details.name}</b>
@@ -676,7 +1056,9 @@ class ViewProjectComponent extends Component {
                             <h6 style={{ color: "#9E9E9E" }}>
                               {this.state.details.category}
                             </h6>
-                            <h6>{this.state.details.summary}</h6>
+                            <h6 style={{ wordWrap: "break-word" }}>
+                              {this.state.details.summary}
+                            </h6>
                             <br />
                             <h6>
                               Team Lead:{" "}
@@ -688,7 +1070,7 @@ class ViewProjectComponent extends Component {
                             </h6>
                           </div>
                         </Col>
-                        <Col sm></Col>
+
                         <Col sm>
                           <div>
                             <div className="InProgressDiv">
@@ -699,8 +1081,22 @@ class ViewProjectComponent extends Component {
                             </div>
                             <hr />
                             <div>
-                              <h4>Budget: ₹ 5000 </h4>
+                              <h4>Budget: ₹ {this.state.details.budget} </h4>
                             </div>
+                            <hr />
+                            {this.state.details.client !== undefined ||
+                              this.state.details.client !== null ||
+                              (Object.keys(this.state.details).length !== 0 && (
+                                <div>
+                                  <h6>
+                                    <b>Client details:</b>{" "}
+                                  </h6>
+                                  <p>{this.state.details.client.first_name}</p>
+                                  <p>8-129, Hanuman Junction</p>
+                                  <p>7306374787</p>
+                                  <p>suryasaikandikonda@gmail.com</p>
+                                </div>
+                              ))}
                           </div>
                         </Col>
                       </Row>
@@ -709,6 +1105,7 @@ class ViewProjectComponent extends Component {
                           marginY={8}
                           marginRight={12}
                           iconBefore={EditIcon}
+                          onClick={this.handleEditProjectOpen}
                         >
                           Edit
                         </Button>
@@ -736,17 +1133,29 @@ class ViewProjectComponent extends Component {
                         >
                           Change Project Status
                         </Button>
+
+                        <Button
+                          marginY={8}
+                          marginRight={12}
+                          onClick={() => this.handleUpdateTechnologiesOpen()}
+                        >
+                          Update Technologies
+                        </Button>
+                        <Button
+                          marginY={8}
+                          marginRight={12}
+                          onClick={() => this.handleGiveRatingOpen()}
+                        >
+                          Give Rating
+                        </Button>
                       </div>
                       <div>
+                        <p>Technologies: </p>
                         {this.state.technologies.map((technology) => (
                           <Badge color="neutral">
                             {technology.technology.name}{" "}
-                            <span>
-                              <RemoveIcon size={12} />{" "}
-                            </span>
                           </Badge>
                         ))}
-                        <Badge>{<AddIcon />}</Badge>
                       </div>
 
                       <div className="ViewProjectTopDiv">

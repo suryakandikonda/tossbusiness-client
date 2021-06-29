@@ -1,0 +1,29 @@
+"filename", "language", "JSON", "Markdown", "XML", "JavaScript", "HTML", "CSS", "comment", "blank", "total"
+"f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\README.md", "Markdown", 0, 38, 0, 0, 0, 0, 0, 33, 71
+"f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\package-lock.json", "JSON", 38386, 0, 0, 0, 0, 0, 0, 1, 38387
+"f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\package.json", "JSON", 51, 0, 0, 0, 0, 0, 0, 1, 52
+"f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\public\index.html", "HTML", 0, 0, 0, 0, 22, 0, 23, 1, 46
+"f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\public\manifest.json", "JSON", 25, 0, 0, 0, 0, 0, 0, 1, 26
+"f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\App.test.js", "JavaScript", 0, 0, 0, 7, 0, 0, 0, 2, 9
+"f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\Components\BottomBarMobileComponent.js", "JavaScript", 0, 0, 0, 87, 0, 0, 34, 4, 125
+"f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\Components\Dashboard\DashboardComponent.js", "JavaScript", 0, 0, 0, 206, 0, 0, 2, 12, 220
+"f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\Components\HeaderComponent.js", "JavaScript", 0, 0, 0, 77, 0, 0, 1, 6, 84
+"f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\Components\LoadingComponent.js", "JavaScript", 0, 0, 0, 12, 0, 0, 0, 3, 15
+"f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\Components\MainComponent.js", "JavaScript", 0, 0, 0, 42, 0, 0, 0, 9, 51
+"f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\Components\Notes\NotesComponent.js", "JavaScript", 0, 0, 0, 248, 0, 0, 3, 24, 275
+"f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\Components\People\PeopleComponent.js", "JavaScript", 0, 0, 0, 260, 0, 0, 2, 18, 280
+"f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\Components\PreLoginHeader.js", "JavaScript", 0, 0, 0, 30, 0, 0, 0, 6, 36
+"f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\Components\PreLogin\LoginComponent.js", "JavaScript", 0, 0, 0, 141, 0, 0, 1, 14, 156
+"f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\Components\PreLogin\RegisterComponent.js", "JavaScript", 0, 0, 0, 273, 0, 0, 1, 22, 296
+"f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\Components\Projects\ProjectsComponent.js", "JavaScript", 0, 0, 0, 251, 0, 0, 1, 18, 270
+"f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\Components\Projects\ViewProjectComponent.js", "JavaScript", 0, 0, 0, 829, 0, 0, 46, 63, 938
+"f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\Components\SidebarComponent.js", "JavaScript", 0, 0, 0, 100, 0, 0, 0, 7, 107
+"f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\Components\Visits\VisitsComponent.js", "JavaScript", 0, 0, 0, 466, 0, 0, 3, 37, 506
+"f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\constants\strings.js", "JavaScript", 0, 0, 0, 2, 0, 0, 0, 1, 3
+"f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\constants\variables.js", "JavaScript", 0, 0, 0, 1, 0, 0, 0, 1, 2
+"f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\index.css", "CSS", 0, 0, 0, 0, 0, 237, 6, 46, 289
+"f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\index.js", "JavaScript", 0, 0, 0, 16, 0, 0, 3, 3, 22
+"f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\logo.svg", "XML", 0, 0, 1, 0, 0, 0, 0, 0, 1
+"f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\reportWebVitals.js", "JavaScript", 0, 0, 0, 12, 0, 0, 0, 2, 14
+"f:\Surya Kandikonda\Projects\4-2\Final Year Project\toss-business\toss-business\src\setupTests.js", "JavaScript", 0, 0, 0, 1, 0, 0, 4, 1, 6
+"Total", "-", 38462, 38, 1, 3061, 22, 237, 130, 336, 42287

@@ -1,18 +1,23 @@
 import React, { Component } from "react";
 import { Redirect, Route, Switch } from "react-router";
 import DashboardComponent from "./Dashboard/DashboardComponent";
+import NotesComponent from "./Notes/NotesComponent";
 import PeopleComponent from "./People/PeopleComponent";
 import LoginComponent from "./PreLogin/LoginComponent";
 import RegisterComponent from "./PreLogin/RegisterComponent";
 import ProjectsComponent from "./Projects/ProjectsComponent";
 import ViewProjectComponent from "./Projects/ViewProjectComponent";
 import VisitsComponent from "./Visits/VisitsComponent";
+import BottomBarMobileComponent from "./BottomBarMobileComponent";
+import HomeComponent from "./HomeComponent";
 
 class MainComponent extends Component {
   render() {
     return (
       <React.Fragment>
         <Switch>
+          {/* Home */}
+          <Route path="/home" component={HomeComponent} />
           <Route path="/login" component={LoginComponent} />
           <Route path="/register" component={RegisterComponent} />
           {/* Home */}
@@ -35,7 +40,10 @@ class MainComponent extends Component {
           {/* Visits */}
           <Route path="/visits" component={VisitsComponent} />
 
-          <Redirect to="/login" />
+          {/* Notes */}
+          <Route path="/notes" component={NotesComponent} />
+
+          <Redirect to="/home" />
         </Switch>
       </React.Fragment>
     );

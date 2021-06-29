@@ -7,9 +7,19 @@ import {
   IoDocumentTextOutline,
   IoNewspaperOutline,
 } from "react-icons/io5";
+import { Link } from "react-router-dom";
 import { Col, Container, Row } from "reactstrap";
 
+import TossLogo from "../assets/TossLogo.png";
+
 class HeaderComponent extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      selected: this.props.selected,
+    };
+  }
   render() {
     return (
       <React.Fragment>
@@ -19,10 +29,12 @@ class HeaderComponent extends Component {
               <Col sm>
                 <Row>
                   <Col sm className="nopadding">
-                    <div style={{ textAlign: "center", paddingTop: "10px" }}>
-                      <IoDocumentTextOutline size={24} />
-                      <h6>Notes</h6>
-                    </div>
+                    <Link to="/notes" id="NoHoverLink">
+                      <div style={{ textAlign: "center", paddingTop: "10px" }}>
+                        <IoDocumentTextOutline size={24} />
+                        <h6>Notes</h6>
+                      </div>
+                    </Link>
                   </Col>
                   <Col sm className="nopadding">
                     <div style={{ textAlign: "center", paddingTop: "10px" }}>
@@ -49,6 +61,19 @@ class HeaderComponent extends Component {
               </Col>
             </Row>
           </Container>
+        </div>
+
+        <div className="HeaderMobileMainDiv d-block d-sm-none">
+          <div>
+            <img
+              src={TossLogo}
+              className="img-fluid"
+              style={{ width: "100px" }}
+            />
+            <span style={{ float: "right", marginTop: "8px" }}>
+              <Avatar name="Surya Kandikonda" size={40} />
+            </span>
+          </div>
         </div>
       </React.Fragment>
     );

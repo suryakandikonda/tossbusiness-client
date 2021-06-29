@@ -8,6 +8,7 @@ import { SERVER_URL } from "../../constants/variables";
 import PreLoginHeader from "../PreLoginHeader";
 
 import Cookies from "universal-cookie";
+import { get, set } from "idb-keyval";
 
 class LoginComponent extends Component {
   constructor(props) {
@@ -69,8 +70,14 @@ class LoginComponent extends Component {
           this.setState({
             login_clicked: false,
           });
-          if (result.user.company !== null) window.location.href = "/projects";
-          else toaster.notify("Client page coming soon");
+          if (result.user.company !== null) {
+            get("Notes" + result.user._id).then((val) => {
+              if (val === undefined) {
+                set("Notes" + result.user._id, []);
+              }
+              window.location.href = "/projects";
+            });
+          } else toaster.notify("Client page coming soon");
         } else {
           this.setState({
             login_clicked: false,
@@ -86,13 +93,14 @@ class LoginComponent extends Component {
         toaster.danger("Couldn't Login. Please try again.");
       });
   };
+
   render() {
     return (
       <React.Fragment>
         <PreLoginHeader />
         <Container>
           <Row>
-            <Col sm>
+            <Col sm className="d-none d-sm-block">
               <div>
                 <img
                   src={LoginImage}
