@@ -12,6 +12,7 @@ import BottomBarMobileComponent from "./BottomBarMobileComponent";
 import HomeComponent from "./HomeComponent";
 import ClientProjectsComponent from "./Projects/ClientProjectsComponent";
 import ReportsComponent from "./Reports/ReportsComponent";
+import PostsComponent from "./Posts/PostsComponent";
 
 class MainComponent extends Component {
   render() {
@@ -53,6 +54,9 @@ class MainComponent extends Component {
 
           {/* Notes */}
           <Route path="/notes" component={NotesComponent} />
+
+          {/* Posts */}
+          <Route path="/posts" component={PostsComponent} />
 
           <Redirect to="/home" />
         </Switch>

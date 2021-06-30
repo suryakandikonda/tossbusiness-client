@@ -78,10 +78,12 @@ class HeaderComponent extends Component {
                     </Link>
                   </Col>
                   <Col sm className="nopadding">
-                    <div style={{ textAlign: "center", paddingTop: "10px" }}>
-                      <IoNewspaperOutline size={24} />
-                      <h6>Posts</h6>
-                    </div>
+                    <Link to="/posts" id="NoHoverLink">
+                      <div style={{ textAlign: "center", paddingTop: "10px" }}>
+                        <IoNewspaperOutline size={24} />
+                        <h6>Posts</h6>
+                      </div>
+                    </Link>
                   </Col>
                 </Row>
               </Col>
