@@ -187,8 +187,8 @@ class RegisterComponent extends Component {
           <div>
             <p>
               We have sent an email with 6 digit OTP to your email address (
-              {this.state.email}). Please enter the OTP to verify your
-              email. You can do this later too.
+              {this.state.email}). Please enter the OTP to verify your email.
+              You can do this later too.
             </p>
             <br />
             <TextInput
@@ -200,7 +200,7 @@ class RegisterComponent extends Component {
         </Dialog>
         <Container>
           <Row>
-            <Col sm>
+            <Col sm className="d-none d-sm-block">
               <div>
                 <img
                   src={LoginImage}
@@ -278,7 +278,7 @@ class RegisterComponent extends Component {
                     Signup
                   </Button>
                 </div>
-                <div style={{ marginTop: "30px" }}>
+                <div style={{ marginTop: "30px", marginBottom: "30px" }}>
                   <p>
                     Already have a account? <Link to="/login">Login</Link>
                   </p>

@@ -521,7 +521,7 @@ class ViewProjectComponent extends Component {
 
   getCompanyEmployees = () => {
     var myHeaders = new Headers();
-    myHeaders.append("company", "60c5bd6a019bbe414c768da4");
+    myHeaders.append("company", this.state.cookies.get("userDetails").company);
 
     var requestOptions = {
       method: "GET",

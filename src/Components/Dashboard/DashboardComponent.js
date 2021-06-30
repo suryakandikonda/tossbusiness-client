@@ -208,8 +208,9 @@ class DashboardComponent extends Component {
         this.setState({
           userDetails: this.state.cookies.get("userDetails"),
         });
-        if (this.state.cookies.get("userDetails").role >= 3)
+        if (this.state.cookies.get("userDetails").role === 3)
           this.getDashboardDetails();
+        else window.location.href = "/projects";
       })
       .catch((err) => {
         window.location.href = "/login";

@@ -35,6 +35,7 @@ import {
   IoEllipsisHorizontalCircleOutline,
   IoDocumentTextOutline,
   IoNewspaperOutline,
+  IoCartOutline,
 } from "react-icons/io5";
 import { Col, Container, Row } from "reactstrap";
 import { Nav, NavItem } from "reactstrap";
@@ -110,13 +111,13 @@ class BottomBarMobileComponent extends Component {
               </h4>
             </div> */}
 
-            <Link to="/funds" id="NoHoverLink">
+            <Link to="/inventory" id="NoHoverLink">
               <div className="HeaderProfileIconItem">
                 <h4>
                   <span>
-                    <IoCalculatorOutline size={28} />
+                    <IoCartOutline size={28} />
                   </span>
-                  <span style={{ marginLeft: "20px" }}>Funds</span>
+                  <span style={{ marginLeft: "20px" }}>Inventory</span>
                 </h4>
               </div>
             </Link>

@@ -5,7 +5,8 @@ import {
   IoPeopleCircleOutline,
   IoLocationOutline,
   IoCalculatorOutline,
-  IoStatsChartOutline
+  IoStatsChartOutline,
+  IoCartOutline,
 } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
@@ -91,8 +92,8 @@ class SidebarComponent extends Component {
                       : ""
                   }
                 >
-                  <IoCalculatorOutline size={40} />
-                  <p>Funds</p>
+                  <IoCartOutline size={40} />
+                  <p>Inventory</p>
                 </div>
               </Link>
             </div>

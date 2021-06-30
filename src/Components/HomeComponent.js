@@ -28,6 +28,7 @@ class HomeComponent extends Component {
 
     this.state = {
       isLoading: true,
+      originalCompanies: [],
       companies: [],
       cookies: new Cookies(),
       userDetails: "",
@@ -149,6 +150,7 @@ class HomeComponent extends Component {
           this.setState({
             isLoading: false,
             companies: result.data,
+            originalCompanies: result.data,
           });
         }
         this.setState({
@@ -156,6 +158,30 @@ class HomeComponent extends Component {
         });
       })
       .catch((error) => console.log("error", error));
+  };
+
+  handleCategoryFilterChange = (category) => {
+    this.setState({
+      category: category,
+    });
+
+    var originalList = this.state.originalCompanies;
+
+    var filteredCompanies = [];
+
+    originalList.forEach((company) => {
+      for (var i = 0; i < company.projects.length; i++) {
+        if (company.projects[i].category === category) {
+          filteredCompanies.push(company);
+          break;
+        }
+      }
+    });
+    this.setState({
+      companies: filteredCompanies,
+    });
+
+    console.log("Filtered Companies:: ", filteredCompanies);
   };
 
   componentDidMount() {
@@ -288,7 +314,7 @@ class HomeComponent extends Component {
                         width="95%"
                         value={this.state.category}
                         onChange={(event) => {
-                          this.setState({ category: event.target.value });
+                          this.handleCategoryFilterChange(event.target.value);
                         }}
                       >
                         <option value="All">All</option>

@@ -124,11 +124,11 @@ class ProjectsComponent extends Component {
                     <div className="PageMainDivContent">
                       <h2>
                         <b>Projects</b>
-                        <span style={{ float: "right" }}>
+                        {/* <span style={{ float: "right" }}>
                           <Tooltip content="Create Project">
                             <IoAddOutline />
                           </Tooltip>
-                        </span>
+                        </span> */}
                       </h2>
                       <div className="ProjectsTopDiv">
                         <Row>

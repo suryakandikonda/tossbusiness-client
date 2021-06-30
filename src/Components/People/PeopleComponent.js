@@ -2,16 +2,17 @@ import {
   Badge,
   Tooltip,
   Button,
-  Table,
   SelectMenu,
   Dialog,
   TextInput,
   RadioGroup,
   toaster,
+  TrashIcon,
+  StopIcon,
 } from "evergreen-ui";
 import React, { Component } from "react";
-import { IoAddOutline } from "react-icons/io5";
-import { Row, Col, Container } from "reactstrap";
+import { IoAddOutline, IoStopCircleOutline } from "react-icons/io5";
+import { Row, Col, Container, Table } from "reactstrap";
 import Cookies from "universal-cookie/es6";
 import { SERVER_URL } from "../../constants/variables";
 import HeaderComponent from "../HeaderComponent";
@@ -24,16 +25,21 @@ class PeopleComponent extends Component {
     this.state = {
       cookies: new Cookies(),
       userDetails: "",
+      //
+      data: [],
+      original_data: [],
+
+      //
       selectedFilter: "All",
-      filterOptions: ["All", "Admins", "Finance", "Tech"],
+      filterOptions: ["All", "Admins", "Inventory", "Tech"],
       roleOptions: [
         {
           label: "Tech",
           value: "Tech",
         },
         {
-          label: "Finance",
-          value: "Finance",
+          label: "Admin",
+          value: "Admin",
         },
         {
           label: "Inventory",
@@ -54,6 +60,36 @@ class PeopleComponent extends Component {
     };
     this.handleInputChange = this.handleInputChange.bind(this);
   }
+
+  getEmployees = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("company", this.state.cookies.get("userDetails").company);
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(SERVER_URL + "/company/employees", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log("Company Members", result);
+        if (result.success) {
+          var membersList = [];
+          membersList = result.data.filter(
+            (member) => member._id !== this.state.cookies.get("userDetails")._id
+          );
+
+          console.log("Memberss:: ", membersList);
+          this.setState({
+            data: membersList,
+            original_data: membersList,
+          });
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
 
   addMemberAPI = (creds) => {
     this.setState({
@@ -110,6 +146,7 @@ class PeopleComponent extends Component {
       add_first_clicked: false,
       add_second_clicked: false,
     });
+    this.getEmployees();
   };
 
   handleFilterChange = (option) => {
@@ -118,11 +155,41 @@ class PeopleComponent extends Component {
     });
   };
 
+  blockUnblockAPI = (employee) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      employee: employee,
+    });
+
+    var requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(SERVER_URL + "/users/employee/blockunblock", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if (result.success) {
+          toaster.success("Action Successful");
+          this.getEmployees();
+        } else {
+          toaster.danger("Something went wrong. Please try again");
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
+
   componentDidMount() {
     var userDetails = this.state.cookies.get("userDetails");
     this.setState({
       userDetails: userDetails,
     });
+    this.getEmployees();
   }
   render() {
     return (
@@ -233,7 +300,7 @@ class PeopleComponent extends Component {
                           </Button>
                         </div>
                       )}
-                      <div style={{ marginTop: "30px" }}>
+                      {/* <div style={{ marginTop: "30px" }}>
                         <SelectMenu
                           title="Select name"
                           options={this.state.filterOptions.map((label) => ({
@@ -249,21 +316,68 @@ class PeopleComponent extends Component {
                             {this.state.selectedFilter || "Filter people..."}
                           </Button>
                         </SelectMenu>
-                      </div>
+                      </div> */}
                       <div className="PeopleTableMainDiv">
-                        <Table>
-                          <Table.Head>
-                            <Table.SearchHeaderCell />
+                        <Container>
+                          <Table responsive hover>
+                            <thead>
+                              <tr>
+                                <th>Name</th>
+                                <th>Role</th>
+                                <th>Email</th>
+                                <th>Mobile Number</th>
+                                <th>City</th>
+                                <th>Actions</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {this.state.data.length > 0 &&
+                                this.state.data.map((item) => (
+                                  <tr>
+                                    <th scope="row">
+                                      {item.first_name + " " + item.last_name}
+                                    </th>
+                                    <td>
+                                      {item.role === 3
+                                        ? "Admin"
+                                        : item.role === 4
+                                        ? "Tech"
+                                        : item.role === 5
+                                        ? "Finance"
+                                        : item.role === 6
+                                        ? "Inventory"
+                                        : ""}
+                                    </td>
+                                    <td>{item.email}</td>
+                                    <td>{item.mobile_number}</td>
+                                    <td>{item.city}</td>
 
-                            <Table.TextHeaderCell>Role</Table.TextHeaderCell>
-                          </Table.Head>
-                          <Table.Body height={240}>
-                            <Table.Row isSelectable>
-                              <Table.TextCell>Surya</Table.TextCell>
-                              <Table.TextCell>Admin</Table.TextCell>
-                            </Table.Row>
-                          </Table.Body>
-                        </Table>
+                                    <td>
+                                      {this.state.userDetails.role === 3 && (
+                                        <IoStopCircleOutline
+                                          size={20}
+                                          color={
+                                            item.is_blocked ? "green" : "red"
+                                          }
+                                          onClick={() =>
+                                            this.blockUnblockAPI(item._id)
+                                          }
+                                        />
+                                      )}
+                                      <span></span>
+                                      {/* <span>
+                                        <TrashIcon
+                                          onClick={() =>
+                                            this.deleteVisitAPI(item._id)
+                                          }
+                                        />
+                                      </span> */}
+                                    </td>
+                                  </tr>
+                                ))}
+                            </tbody>
+                          </Table>
+                        </Container>
                       </div>
                     </div>
                   </div>

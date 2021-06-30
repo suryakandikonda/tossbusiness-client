@@ -2,7 +2,6 @@ import {
   Badge,
   Tooltip,
   Button,
-  Table,
   SelectMenu,
   Dialog,
   TextInput,
@@ -15,7 +14,7 @@ import {
 import moment from "moment";
 import React, { Component } from "react";
 import { IoAddOutline } from "react-icons/io5";
-import { Row, Col, Input } from "reactstrap";
+import { Row, Col, Input, Container, Table } from "reactstrap";
 import Cookies from "universal-cookie/es6";
 import { SERVER_URL } from "../../constants/variables";
 import HeaderComponent from "../HeaderComponent";
@@ -436,59 +435,45 @@ class VisitsComponent extends Component {
                       <div></div>
 
                       <div className="PeopleTableMainDiv">
-                        <Table>
-                          <Table.Head>
-                            <Table.SearchHeaderCell
-                              onChange={(value) =>
-                                this.handleSearchQuery(value)
-                              }
-                              placeholder="Search by name"
-                            />
-
-                            <Table.TextHeaderCell>Type</Table.TextHeaderCell>
-                            <Table.TextHeaderCell>
-                              Mobile Number
-                            </Table.TextHeaderCell>
-                            <Table.TextHeaderCell>Address</Table.TextHeaderCell>
-                            <Table.TextHeaderCell>Remarks</Table.TextHeaderCell>
-                            <Table.TextHeaderCell>
-                              Next followup date
-                            </Table.TextHeaderCell>
-                            <Table.TextHeaderCell>Actions</Table.TextHeaderCell>
-                          </Table.Head>
-                          <Table.Body>
-                            {this.state.data.length > 0 &&
-                              this.state.data.map((item) => (
-                                <Table.Row>
-                                  <Table.TextCell>{item.name}</Table.TextCell>
-                                  <Table.TextCell>
-                                    {item.contact_person_type}
-                                  </Table.TextCell>
-                                  <Table.TextCell>
-                                    {item.mobile_number}
-                                  </Table.TextCell>
-                                  <Table.TextCell>
-                                    {item.address}
-                                  </Table.TextCell>
-                                  <Table.TextCell>
-                                    {item.remarks}
-                                  </Table.TextCell>
-                                  <Table.TextCell>
-                                    {moment(item.next_followup_date).format(
-                                      "DD MMM, YYYY"
-                                    )}
-                                  </Table.TextCell>
-                                  <Table.TextCell>
-                                    <TrashIcon
-                                      onClick={() =>
-                                        this.deleteVisitAPI(item._id)
-                                      }
-                                    />
-                                  </Table.TextCell>
-                                </Table.Row>
-                              ))}
-                          </Table.Body>
-                        </Table>
+                        <Container fluid>
+                          <Table responsive hover>
+                            <thead>
+                              <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Mobile Number</th>
+                                <th>Address</th>
+                                <th>Remarks</th>
+                                <th>Next followup date</th>
+                                <th>Actions</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {this.state.data.length > 0 &&
+                                this.state.data.map((item) => (
+                                  <tr>
+                                    <td scope="row">{item.name}</td>
+                                    <td>{item.contact_person_type}</td>
+                                    <td>{item.mobile_number}</td>
+                                    <td>{item.address}</td>
+                                    <td>{item.remarks}</td>
+                                    <td>
+                                      {moment(item.next_followup_date).format(
+                                        "DD MMM, YYYY"
+                                      )}
+                                    </td>
+                                    <td>
+                                      <TrashIcon
+                                        onClick={() =>
+                                          this.deleteVisitAPI(item._id)
+                                        }
+                                      />
+                                    </td>
+                                  </tr>
+                                ))}
+                            </tbody>
+                          </Table>
+                        </Container>
                       </div>
                     </div>
                   </div>

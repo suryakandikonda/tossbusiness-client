@@ -100,6 +100,11 @@ class LoginComponent extends Component {
             login_clicked: false,
           });
           toaster.danger("Verify your email to continue");
+        } else if (result.message === "Blocked") {
+          this.setState({
+            login_clicked: false,
+          });
+          toaster.danger("Your account is blocked. Please contact admin.");
         } else {
           this.setState({
             login_clicked: false,

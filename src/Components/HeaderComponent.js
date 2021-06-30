@@ -12,6 +12,7 @@ import {
   IoFolderOpenOutline,
   IoDocumentTextOutline,
   IoNewspaperOutline,
+  IoHomeOutline,
 } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { Col, Container, Row } from "reactstrap";
@@ -37,14 +38,16 @@ class HeaderComponent extends Component {
           onCloseComplete={() => this.setState({ profile_icon_clicked: false })}
         >
           <div>
-            {/* <div className="HeaderProfileIconItem">
-              <h4>
-                <span>
-                  <PersonIcon size={28} />
-                </span>
-                <span style={{ marginLeft: "20px" }}>Profile</span>
-              </h4>
-            </div> */}
+            <Link to="/home" id="NoHoverLink">
+              <div className="HeaderProfileIconItem">
+                <h4>
+                  <span>
+                    <IoHomeOutline size={28} />
+                  </span>
+                  <span style={{ marginLeft: "20px" }}>Home</span>
+                </h4>
+              </div>
+            </Link>
 
             <div className="HeaderProfileIconItem" onClick={() => logOutUser()}>
               <h4>
