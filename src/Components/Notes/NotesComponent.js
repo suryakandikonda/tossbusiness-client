@@ -21,6 +21,7 @@ import Cookies from "universal-cookie/es6";
 import { SERVER_URL } from "../../constants/variables";
 import HeaderComponent from "../HeaderComponent";
 import SidebarComponent from "../SidebarComponent";
+import BottomBarMobileComponent from "../BottomBarMobileComponent";
 
 class NotesComponent extends Component {
   constructor(props) {
@@ -265,6 +266,9 @@ class NotesComponent extends Component {
               </div>
             </div>
           </div>
+        </div>
+        <div className="d-block d-sm-none">
+          <BottomBarMobileComponent />
         </div>
       </React.Fragment>
     );

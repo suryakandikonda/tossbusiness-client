@@ -13,12 +13,14 @@ import {
   Dialog,
   Textarea,
   toaster,
+  Button,
 } from "evergreen-ui";
 import { projectCategories } from "../constants/projectCategories";
 import { SERVER_URL } from "../constants/variables";
 import LoadingComponent from "./LoadingComponent";
 import Cookies from "universal-cookie";
 import { validateLogin } from "../constants/functions";
+import HeaderComponent from "./HeaderComponent";
 
 class HomeComponent extends Component {
   constructor(props) {
@@ -250,7 +252,7 @@ class HomeComponent extends Component {
         </Dialog>
 
         <div>
-          <PreLoginHeader />
+          <HeaderComponent />
         </div>
 
         <div className="HomeMainDiv">
@@ -260,6 +262,9 @@ class HomeComponent extends Component {
               <div style={{ textAlign: "center" }}>
                 <img src={TossLogo} style={{ width: "200px" }} />
                 <h6>Find the best company for your project.</h6>
+                <Button onClick={() => (window.location.href = "/projects")}>
+                  Go to your Projects
+                </Button>
               </div>
 
               <div style={{ textAlign: "center", marginTop: "40px" }}>

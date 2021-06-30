@@ -1188,6 +1188,18 @@ class ViewProjectComponent extends Component {
                           </Button>
                         )}
 
+                        {this.state.userDetails.role === 3 && (
+                          <Button
+                            marginY={8}
+                            marginRight={12}
+                            onClick={() =>
+                              (window.location.href = `/report/${this.state.project}`)
+                            }
+                          >
+                            View Report
+                          </Button>
+                        )}
+
                         {this.state.clientDetails._id ===
                           this.state.userDetails._id && (
                           <Button

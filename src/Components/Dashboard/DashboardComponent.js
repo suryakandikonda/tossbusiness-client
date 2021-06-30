@@ -41,6 +41,7 @@ class DashboardComponent extends Component {
       employees: [],
       clients: [],
       projectsWorth: 0,
+      projectProgressData: {},
 
       //Tech Stat
       techData: {
@@ -72,11 +73,11 @@ class DashboardComponent extends Component {
 
       //
       projectsData: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+        labels: [""],
         datasets: [
           {
-            label: "# of Votes",
-            data: [12, 19, 3, 5, 2, 3],
+            label: "Progress in %",
+            data: [""],
             backgroundColor: [
               "rgba(255, 99, 132, 0.2)",
               "rgba(54, 162, 235, 0.2)",
@@ -98,11 +99,17 @@ class DashboardComponent extends Component {
         ],
       },
       options: {
+        legend: {
+          display: false,
+        },
         scales: {
           yAxes: [
             {
               ticks: {
                 beginAtZero: true,
+
+                min: 0,
+                max: 100,
               },
             },
           ],
@@ -140,17 +147,54 @@ class DashboardComponent extends Component {
           var projects = result.data.projects;
           var clients = [];
           var projectsWorth = 0;
+          var projectProgressData = {};
+          var technologiesData = {};
           projects.forEach((item) => {
             if (!clients.includes(item.client._id)) {
               clients.push(item.client._id);
             }
             if (item.budget !== undefined) projectsWorth += Number(item.budget);
+
+            // Progress
+            var tasks = item.tasks;
+            var progress = 0;
+            if (tasks.length > 0) {
+              tasks.forEach((task) => {
+                progress += task.progress;
+              });
+              progress = parseInt(progress / tasks.length);
+              projectProgressData[item.name] = progress;
+            }
+
+            // Technologies
+            var technologies = item.technologies;
+            technologies.forEach((item) => {
+              if (technologiesData[item.technology.name] === undefined) {
+                technologiesData[item.technology.name] = 1;
+              } else {
+                technologiesData[item.technology.name] += 1;
+              }
+            });
           });
+
+          console.log("Tech Data:: ", technologiesData);
+
+          var projectData = this.state.projectsData;
+          projectData.labels = Object.keys(projectProgressData);
+          projectData.datasets[0].data = Object.values(projectProgressData);
+
+          var techData = this.state.techData;
+          techData.labels = Object.keys(technologiesData);
+          techData.datasets[0].data = Object.values(technologiesData);
+
           this.setState({
             projects: result.data.projects,
             employees: result.data.employees,
             clients: clients,
             projectsWorth: projectsWorth,
+            projectProgressData: projectProgressData,
+            projectData: projectData,
+            techData: techData,
             isLoading: false,
           });
         }
@@ -249,7 +293,7 @@ class DashboardComponent extends Component {
                       <div className="DashboardSecondDiv">
                         <div>
                           <Row>
-                            <Col sm>
+                            <Col sm="5" className="GraphItemDiv">
                               <div>
                                 <h5>Projects</h5>
                                 <Bar
@@ -258,7 +302,7 @@ class DashboardComponent extends Component {
                                 />
                               </div>
                             </Col>
-                            <Col sm>
+                            <Col sm="5" className="GraphItemDiv">
                               <div>
                                 <h5>Technologies</h5>
                                 <Doughnut data={this.state.techData} />

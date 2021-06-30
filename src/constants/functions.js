@@ -3,6 +3,7 @@ import Cookies from "universal-cookie/es6";
 export const logOutUser = () => {
   // Sign-out successful.
   new Cookies().remove("userDetails");
+  new Cookies().remove("userToken");
   window.location.href = "/login";
 };
 

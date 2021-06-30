@@ -1,4 +1,4 @@
-import { Button, TextInput, toaster } from "evergreen-ui";
+import { Button, TextInput, toaster, Dialog } from "evergreen-ui";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Col, Container, Row } from "reactstrap";
@@ -20,10 +20,29 @@ class LoginComponent extends Component {
       //
       login_clicked: false,
       cookies: new Cookies(),
+
+      //
+      verify_email_first_clicked: false,
+      verify_email_second_clicked: false,
+      email_verify_string: "",
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
+  handleEmailVerificationOpen = () => {
+    this.setState({
+      verify_email_first_clicked: true,
+    });
+  };
+
+  handleEmailVerificationClose = () => {
+    this.setState({
+      verify_email_first_clicked: false,
+      verify_email_second_clicked: false,
+      email_verify_string: "",
+    });
+  };
 
   handleInputChange(event) {
     const target = event.target;
@@ -76,6 +95,11 @@ class LoginComponent extends Component {
             }
             window.location.href = "/projects";
           });
+        } else if (result.message === "Email not verified") {
+          this.setState({
+            login_clicked: false,
+          });
+          toaster.danger("Verify your email to continue");
         } else {
           this.setState({
             login_clicked: false,
@@ -92,9 +116,66 @@ class LoginComponent extends Component {
       });
   };
 
+  verifyEmailAPI = () => {
+    this.setState({
+      verify_email_second_clicked: true,
+    });
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      verify_id: this.state.email_verify_string,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(SERVER_URL + "/users/verification/email", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if (result.success) {
+          toaster.success("Email verification successful");
+          this.handleEmailVerificationClose();
+        } else {
+          toaster.danger("Invalid verification code");
+          this.setState({
+            verify_email_second_clicked: false,
+          });
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
+
   render() {
     return (
       <React.Fragment>
+        {/* Email Verification Dialog */}
+        <Dialog
+          isShown={this.state.verify_email_first_clicked}
+          title="Email Verification"
+          onCloseComplete={this.handleEmailVerificationClose}
+          confirmLabel="Verify"
+          onConfirm={this.verifyEmailAPI}
+          isConfirmLoading={this.state.verify_email_second_clicked}
+        >
+          <div>
+            <p>Enter 6 digit verification code you received on your email.</p>
+            <br />
+            <br />
+            <TextInput
+              autoFocus
+              name="email_verify_string"
+              placeholder="Enter Verification Code here"
+              value={this.state.email_verify_string}
+              onChange={this.handleInputChange}
+            />
+          </div>
+        </Dialog>
         <PreLoginHeader />
         <Container>
           <Row>
@@ -140,6 +221,11 @@ class LoginComponent extends Component {
                   <h6>
                     Not a member? <Link to="/register">Register</Link>
                   </h6>
+                </div>
+                <div style={{ marginTop: "20px" }}>
+                  <Button onClick={this.handleEmailVerificationOpen}>
+                    Email Verification
+                  </Button>
                 </div>
               </div>
             </Col>

@@ -11,6 +11,7 @@ import VisitsComponent from "./Visits/VisitsComponent";
 import BottomBarMobileComponent from "./BottomBarMobileComponent";
 import HomeComponent from "./HomeComponent";
 import ClientProjectsComponent from "./Projects/ClientProjectsComponent";
+import ReportsComponent from "./Reports/ReportsComponent";
 
 class MainComponent extends Component {
   render() {
@@ -33,6 +34,14 @@ class MainComponent extends Component {
             path="/project/:id"
             render={(routerProps) => (
               <ViewProjectComponent match={routerProps.match} />
+            )}
+          />
+
+          <Route
+            exact
+            path="/report/:id"
+            render={(routerProps) => (
+              <ReportsComponent match={routerProps.match} />
             )}
           />
 

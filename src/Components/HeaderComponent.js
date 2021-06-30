@@ -1,4 +1,10 @@
-import { Avatar, SettingsIcon } from "evergreen-ui";
+import {
+  Avatar,
+  LogOutIcon,
+  SettingsIcon,
+  Dialog,
+  PersonIcon,
+} from "evergreen-ui";
 import React, { Component } from "react";
 import {
   IoBookOutline,
@@ -11,6 +17,7 @@ import { Link } from "react-router-dom";
 import { Col, Container, Row } from "reactstrap";
 
 import TossLogo from "../assets/TossLogo.png";
+import { logOutUser } from "../constants/functions";
 
 class HeaderComponent extends Component {
   constructor(props) {
@@ -18,11 +25,42 @@ class HeaderComponent extends Component {
 
     this.state = {
       selected: this.props.selected,
+      profile_icon_clicked: false,
     };
   }
   render() {
     return (
       <React.Fragment>
+        <Dialog
+          isShown={this.state.profile_icon_clicked}
+          hasFooter={false}
+          onCloseComplete={() => this.setState({ profile_icon_clicked: false })}
+        >
+          <div>
+            {/* <div className="HeaderProfileIconItem">
+              <h4>
+                <span>
+                  <PersonIcon size={28} />
+                </span>
+                <span style={{ marginLeft: "20px" }}>Profile</span>
+              </h4>
+            </div> */}
+
+            <div className="HeaderProfileIconItem" onClick={() => logOutUser()}>
+              <h4>
+                <span>
+                  <LogOutIcon size={28} />
+                </span>
+                <span
+                  style={{ marginLeft: "20px" }}
+                  onClick={() => logOutUser()}
+                >
+                  Logout
+                </span>
+              </h4>
+            </div>
+          </div>
+        </Dialog>
         <div className="HeaderMainDiv d-none d-sm-block">
           <Container>
             <Row>
@@ -54,8 +92,15 @@ class HeaderComponent extends Component {
                   {/* <span style={{ marginRight: "20px" }}>
                     <IoSettings />
                   </span> */}
+
                   <span>
-                    <Avatar name="Surya Kandikonda" size={40} />
+                    <Avatar
+                      name="Surya Kandikonda"
+                      size={40}
+                      onClick={() =>
+                        this.setState({ profile_icon_clicked: true })
+                      }
+                    />
                   </span>
                 </div>
               </Col>
@@ -63,6 +108,7 @@ class HeaderComponent extends Component {
           </Container>
         </div>
 
+        {/* Mobile Header */}
         <div className="HeaderMobileMainDiv d-block d-sm-none">
           <div>
             <img
@@ -70,8 +116,14 @@ class HeaderComponent extends Component {
               className="img-fluid"
               style={{ width: "100px" }}
             />
-            <span style={{ float: "right", marginTop: "8px" }}>
-              <Avatar name="Surya Kandikonda" size={40} />
+            <span
+              style={{ float: "right", marginTop: "8px", marginRight: "4px" }}
+            >
+              <Avatar
+                name="Surya Kandikonda"
+                size={40}
+                onClick={() => this.setState({ profile_icon_clicked: true })}
+              />
             </span>
           </div>
         </div>
