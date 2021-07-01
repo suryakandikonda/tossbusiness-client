@@ -83,7 +83,7 @@ class SidebarComponent extends Component {
                 </div>
               </Link>
 
-              <Link to="/funds" id="NoHoverLink">
+              <Link to="/projects" id="NoHoverLink">
                 <div
                   className="SidePanelItem"
                   id={

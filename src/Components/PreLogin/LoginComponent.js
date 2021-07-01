@@ -184,7 +184,7 @@ class LoginComponent extends Component {
         <PreLoginHeader />
         <Container>
           <Row>
-            <Col sm className="d-none d-sm-block">
+            <Col sm className="d-none d-sm-block"className="d-none d-sm-block">
               <div>
                 <img
                   src={LoginImage}

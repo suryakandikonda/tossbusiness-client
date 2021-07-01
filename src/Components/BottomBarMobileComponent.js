@@ -111,7 +111,18 @@ class BottomBarMobileComponent extends Component {
               </h4>
             </div> */}
 
-            <Link to="/inventory" id="NoHoverLink">
+            <Link to="/visits" id="NoHoverLink">
+              <div className="HeaderProfileIconItem">
+                <h4>
+                  <span>
+                    <IoLocationOutline size={28} />
+                  </span>
+                  <span style={{ marginLeft: "20px" }}>Visits</span>
+                </h4>
+              </div>
+            </Link>
+
+            <Link to="/projects" id="NoHoverLink">
               <div className="HeaderProfileIconItem">
                 <h4>
                   <span>

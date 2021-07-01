@@ -16,6 +16,7 @@ import {
 } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { Col, Container, Row } from "reactstrap";
+import Cookies from "universal-cookie/es6";
 
 import TossLogo from "../assets/TossLogo.png";
 import { logOutUser } from "../constants/functions";
@@ -25,6 +26,7 @@ class HeaderComponent extends Component {
     super(props);
 
     this.state = {
+      cookies: new Cookies(),
       selected: this.props.selected,
       profile_icon_clicked: false,
     };
@@ -89,7 +91,7 @@ class HeaderComponent extends Component {
               </Col>
               <Col sm>
                 <div className="HeaderItemDiv" style={{ textAlign: "center" }}>
-                  <h4>Sun Technologies</h4>
+                  {/* <h4>Sun Technologies</h4> */}
                 </div>
               </Col>
               <Col sm>
@@ -100,7 +102,10 @@ class HeaderComponent extends Component {
 
                   <span>
                     <Avatar
-                      name="Surya Kandikonda"
+                      name={
+                        this.state.cookies.get("userDetails").first_name +
+                        this.state.cookies.get("userDetails").last_name
+                      }
                       size={40}
                       onClick={() =>
                         this.setState({ profile_icon_clicked: true })
@@ -125,7 +130,10 @@ class HeaderComponent extends Component {
               style={{ float: "right", marginTop: "8px", marginRight: "4px" }}
             >
               <Avatar
-                name="Surya Kandikonda"
+                name={
+                  this.state.cookies.get("userDetails").first_name +
+                  this.state.cookies.get("userDetails").last_name
+                }
                 size={40}
                 onClick={() => this.setState({ profile_icon_clicked: true })}
               />

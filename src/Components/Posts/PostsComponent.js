@@ -179,6 +179,33 @@ class PostsComponent extends Component {
       .catch((error) => console.log("error", error));
   };
 
+  dislikePostAPI = (post) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      post: post,
+      liked_by_id: this.state.cookies.get("userDetails")._id,
+    });
+
+    var requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(SERVER_URL + "/post/dislike", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if (result.success) {
+          this.getPosts();
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
+
   componentDidMount() {
     var userDetails = this.state.cookies.get("userDetails");
     this.getPosts();
@@ -282,6 +309,9 @@ class PostsComponent extends Component {
                                               <IoHeart
                                                 size={24}
                                                 style={{ color: "red" }}
+                                                onClick={() =>
+                                                  this.dislikePostAPI(post._id)
+                                                }
                                               />
                                             ) : (
                                               <IoHeartOutline

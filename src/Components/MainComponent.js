@@ -58,7 +58,7 @@ class MainComponent extends Component {
           {/* Posts */}
           <Route path="/posts" component={PostsComponent} />
 
-          <Redirect to="/home" />
+          <Redirect to="/login" />
         </Switch>
       </React.Fragment>
     );
