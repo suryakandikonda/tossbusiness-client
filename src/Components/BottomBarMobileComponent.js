@@ -122,7 +122,7 @@ class BottomBarMobileComponent extends Component {
               </div>
             </Link>
 
-            <Link to="/projects" id="NoHoverLink">
+            <Link to="/inventory" id="NoHoverLink">
               <div className="HeaderProfileIconItem">
                 <h4>
                   <span>

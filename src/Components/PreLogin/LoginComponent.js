@@ -184,7 +184,7 @@ class LoginComponent extends Component {
         <PreLoginHeader />
         <Container>
           <Row>
-            <Col sm className="d-none d-sm-block"className="d-none d-sm-block">
+            <Col sm className="d-none d-sm-block" className="d-none d-sm-block">
               <div>
                 <img
                   src={LoginImage}
@@ -225,6 +225,11 @@ class LoginComponent extends Component {
                 <div style={{ marginTop: "50px" }}>
                   <h6>
                     Not a member? <Link to="/register">Register</Link>
+                  </h6>
+                  <h6>
+                    <Link to="/signup/client">
+                      Click here to register as client
+                    </Link>
                   </h6>
                 </div>
                 <div style={{ marginTop: "20px" }}>

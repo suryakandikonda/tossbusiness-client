@@ -83,11 +83,11 @@ class SidebarComponent extends Component {
                 </div>
               </Link>
 
-              <Link to="/projects" id="NoHoverLink">
+              <Link to="/inventory" id="NoHoverLink">
                 <div
                   className="SidePanelItem"
                   id={
-                    this.state.selected === "funds"
+                    this.state.selected === "inventory"
                       ? "SidePanelItemSelected"
                       : ""
                   }

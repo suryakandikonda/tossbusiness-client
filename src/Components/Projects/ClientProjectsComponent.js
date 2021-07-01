@@ -229,8 +229,7 @@ class ClientProjectsComponent extends Component {
                                       <Col sm>
                                         <div>
                                           <p>
-                                            <b>Client: </b>{" "}
-                                            {item.client.first_name}
+                                            <b>Company: </b> {item.company.name}
                                           </p>
                                         </div>
                                       </Col>

@@ -25,7 +25,7 @@ import {
 } from "evergreen-ui";
 import moment from "moment";
 import React, { Component } from "react";
-import { IoArrowBackOutline, IoPencil } from "react-icons/io5";
+import { IoArrowBackOutline, IoPencil, IoStarHalf } from "react-icons/io5";
 import { Col, Row, Input } from "reactstrap";
 import Cookies from "universal-cookie/es6";
 import { projectCategories } from "../../constants/projectCategories";
@@ -37,6 +37,7 @@ import SidebarComponent from "../SidebarComponent";
 import ReactStars from "react-rating-stars-component";
 import { validateLogin } from "../../constants/functions";
 import LoadingComponent from "../LoadingComponent";
+import BottomBarMobileComponent from "../BottomBarMobileComponent";
 
 class ViewProjectComponent extends Component {
   constructor(props) {
@@ -645,6 +646,36 @@ class ViewProjectComponent extends Component {
       .catch((error) => console.log("error", error));
   };
 
+  rateCompanyAPI = (rating) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      company: this.state.details.company,
+      rating: rating,
+    });
+
+    var requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(SERVER_URL + "/company/rateCompany", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if (result.success) {
+          toaster.success("Rated Company Successfully");
+          this.getProjectDetails();
+        } else {
+          toaster.danger("Something went wrong. Please Try again");
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
+
   componentDidMount() {
     validateLogin
       .then((res) => {
@@ -677,6 +708,17 @@ class ViewProjectComponent extends Component {
           onCloseComplete={this.handleGiveRatingClose}
         >
           <div>
+            <p>Give rating to this company: </p>
+            <ReactStars
+              count={5}
+              onChange={(rating) => this.rateCompanyAPI(rating)}
+              value={0}
+              size={24}
+              emptyIcon={<StarEmptyIcon />}
+              fullIcon={<StarIcon />}
+              activeColor="#ffd700"
+            />
+
             <p>Give rating for Technologies: </p>
             <br />
             {this.state.technologies.map((technology) => (
@@ -1414,6 +1456,9 @@ class ViewProjectComponent extends Component {
               </div>
             </div>
           </div>
+        </div>
+        <div className="d-block d-sm-none">
+          <BottomBarMobileComponent selected="projects" />
         </div>
       </React.Fragment>
     );

@@ -13,6 +13,8 @@ import HomeComponent from "./HomeComponent";
 import ClientProjectsComponent from "./Projects/ClientProjectsComponent";
 import ReportsComponent from "./Reports/ReportsComponent";
 import PostsComponent from "./Posts/PostsComponent";
+import InventoryComponent from "./Inventory/InventoryComponent";
+import ClientSignupComponent from "./PreLogin/ClientSignupComponent";
 
 class MainComponent extends Component {
   render() {
@@ -23,6 +25,7 @@ class MainComponent extends Component {
           <Route path="/home" component={HomeComponent} />
           <Route path="/login" component={LoginComponent} />
           <Route path="/register" component={RegisterComponent} />
+          <Route path="/signup/client" component={ClientSignupComponent} />
           {/* Home */}
           <Route path="/dashboard" component={DashboardComponent} />
 
@@ -57,6 +60,9 @@ class MainComponent extends Component {
 
           {/* Posts */}
           <Route path="/posts" component={PostsComponent} />
+
+          {/* Inventory */}
+          <Route path="/inventory" component={InventoryComponent} />
 
           <Redirect to="/login" />
         </Switch>

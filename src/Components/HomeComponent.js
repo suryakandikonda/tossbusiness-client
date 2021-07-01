@@ -184,6 +184,26 @@ class HomeComponent extends Component {
     console.log("Filtered Companies:: ", filteredCompanies);
   };
 
+  handleRatingFilterChange = (rating) => {
+    if (rating === "All") {
+      this.setState({
+        companies: this.state.originalCompanies,
+      });
+    } else {
+      var originalList = this.state.originalCompanies;
+
+      var filteredCompanies = [];
+
+      filteredCompanies = originalList.filter(
+        (item) => parseInt(item.rating) === Math.round(parseInt(rating))
+      );
+      this.setState({
+        rating: rating,
+        companies: filteredCompanies,
+      });
+    }
+  };
+
   componentDidMount() {
     validateLogin
       .then((res) => {
@@ -287,16 +307,16 @@ class HomeComponent extends Component {
             <div className="HomeDiv">
               <div style={{ textAlign: "center" }}>
                 <img src={TossLogo} style={{ width: "200px" }} />
-                <h6>Find the best company for your project.</h6>
+                <h6>Find the best companies for your project.</h6>
                 <Button onClick={() => (window.location.href = "/projects")}>
                   Go to your Projects
                 </Button>
               </div>
 
               <div style={{ textAlign: "center", marginTop: "40px" }}>
-                <p>Filters: </p>
+                <p>Filter company by rating: </p>
                 <Row>
-                  <Col sm style={{ marginTop: "20px" }}>
+                  {/* <Col sm style={{ marginTop: "20px" }}>
                     <div>
                       <TextInput placeholder="Company Name" />
                     </div>
@@ -323,15 +343,14 @@ class HomeComponent extends Component {
                         ))}
                       </Select>
                     </div>
-                  </Col>
+                  </Col> */}
                   <Col sm style={{ marginTop: "20px" }}>
                     <div>
                       <Select
                         placeholder="Rating"
-                        width="95%"
                         value={this.state.rating}
                         onChange={(event) => {
-                          this.setState({ rating: event.target.value });
+                          this.handleRatingFilterChange(event.target.value);
                         }}
                       >
                         <option value="All">All</option>

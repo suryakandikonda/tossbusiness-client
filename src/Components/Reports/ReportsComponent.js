@@ -24,6 +24,8 @@ class ReportsComponent extends Component {
 
       relatedProjects: [],
       avgBudget: 0,
+      prevDaysValue: 0,
+      ratingValue: 0,
     };
   }
 
@@ -86,14 +88,43 @@ class ReportsComponent extends Component {
 
           var avgBudget = 0;
 
+          var prevDays = [];
+          relatedProjects.forEach((item) => {
+            var diff = moment(item.end_date).diff(
+              moment(item.start_date),
+              "days"
+            );
+            prevDays.push(diff);
+          });
+
+          var ratingArray = [];
+
+          relatedProjects.forEach((item) => {
+            var rating = 0;
+            item.technologies.forEach((tech) => {
+              if (tech.rating !== null || tech.rating !== undefined) {
+                rating += tech.rating;
+              }
+            });
+            ratingArray.push(rating);
+          });
+
           relatedProjects.forEach((item) => {
             avgBudget += item.budget;
           });
 
+          var prevDaysValue = 0;
+          var ratingValue = 0;
+
           if (relatedProjects.length > 0) {
             avgBudget = avgBudget / relatedProjects.length;
+            prevDays.forEach((item) => (prevDaysValue += item));
+            ratingArray.forEach((item) => (ratingValue += item));
+            prevDaysValue = prevDaysValue / relatedProjects.length;
+            ratingValue = ratingValue / relatedProjects.length;
           } else {
             avgBudget = 0;
+            prevDaysValue = 0;
           }
 
           console.log("Related Projects:: ", avgBudget);
@@ -102,6 +133,8 @@ class ReportsComponent extends Component {
             relatedProjects: relatedProjects,
             avgBudget: avgBudget,
             isLoading: false,
+            prevDaysValue: prevDaysValue,
+            ratingValue: ratingValue,
           });
         }
       })
@@ -165,6 +198,54 @@ class ReportsComponent extends Component {
                                   </h2>
                                 </div>
                               </Col>
+                            </Row>
+                          </Container>
+                        </div>
+
+                        <div className="ReportsBudgetMainDiv">
+                          <Container fluid>
+                            <Row>
+                              <Col sm className="ReportsBudgetItem">
+                                <div>
+                                  <h2 className="display-6">
+                                    Days to Complete Project: <br />
+                                    {moment(this.state.details.end_date).diff(
+                                      moment(this.state.details.start_date),
+                                      "days"
+                                    )}
+                                  </h2>
+                                </div>
+                              </Col>
+
+                              <Col sm className="ReportsBudgetItem">
+                                <div>
+                                  <h2 className="display-6">
+                                    Avg. Days: <br />
+                                    <span style={{ fontSize: "14px" }}>
+                                      (based on previous related projects)
+                                    </span>
+                                    <br />
+                                    {this.state.prevDaysValue}
+                                  </h2>
+                                </div>
+                              </Col>
+                            </Row>
+                          </Container>
+                        </div>
+
+                        <div className="ReportsBudgetMainDiv">
+                          <Container fluid>
+                            <Row>
+                              <Col sm className="ReportsBudgetItem">
+                                <div>
+                                  <h2 className="display-6">
+                                    Avg. rating: <br />
+                                    {this.state.ratingValue}
+                                  </h2>
+                                </div>
+                              </Col>
+
+                              <Col sm></Col>
                             </Row>
                           </Container>
                         </div>

@@ -20,6 +20,8 @@ import { SERVER_URL } from "../../constants/variables";
 import HeaderComponent from "../HeaderComponent";
 import SidebarComponent from "../SidebarComponent";
 
+import BottomBarMobileComponent from "../BottomBarMobileComponent";
+
 import { TossLogoBase64 } from "../../constants/strings";
 
 import TossLogo from "../../assets/TossLogo.png";
@@ -481,6 +483,10 @@ class VisitsComponent extends Component {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="d-block d-sm-none">
+          <BottomBarMobileComponent selected="dashboard" />
         </div>
       </React.Fragment>
     );
