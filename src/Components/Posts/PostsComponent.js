@@ -22,6 +22,7 @@ import { SERVER_URL } from "../../constants/variables";
 import HeaderComponent from "../HeaderComponent";
 import SidebarComponent from "../SidebarComponent";
 import BottomBarMobileComponent from "../BottomBarMobileComponent";
+import ForbiddenComponent from "../ForbiddenComponent";
 
 class PostsComponent extends Component {
   constructor(props) {
@@ -215,6 +216,13 @@ class PostsComponent extends Component {
     });
   }
   render() {
+    if (this.state.cookies.get("userDetails").role === 2) {
+      return (
+        <React.Fragment>
+          <ForbiddenComponent selected="posts" />
+        </React.Fragment>
+      );
+    }
     if (this.state.isLoading) {
       return (
         <React.Fragment>

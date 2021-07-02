@@ -29,6 +29,7 @@ import { Bar, Doughnut } from "react-chartjs-2";
 import BottomBarMobileComponent from "../BottomBarMobileComponent";
 import { validateLogin } from "../../constants/functions";
 import LoadingComponent from "../LoadingComponent";
+import ForbiddenComponent from "../ForbiddenComponent";
 
 class InventoryComponent extends Component {
   constructor(props) {
@@ -461,7 +462,7 @@ class InventoryComponent extends Component {
         ) {
           this.getInventoryDetails();
           this.getProjects();
-        } else window.location.href = "/projects";
+        }
       })
       .catch((err) => {
         window.location.href = "/login";
@@ -469,6 +470,16 @@ class InventoryComponent extends Component {
   }
 
   render() {
+    if (
+      this.state.cookies.get("userDetails").role === 2 ||
+      this.state.cookies.get("userDetails").role === 4
+    ) {
+      return (
+        <React.Fragment>
+          <ForbiddenComponent selected="inventory" />
+        </React.Fragment>
+      );
+    }
     if (this.state.isLoading) {
       return (
         <React.Fragment>

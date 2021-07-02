@@ -27,6 +27,7 @@ import { Bar, Doughnut } from "react-chartjs-2";
 import BottomBarMobileComponent from "../BottomBarMobileComponent";
 import { validateLogin } from "../../constants/functions";
 import LoadingComponent from "../LoadingComponent";
+import ForbiddenComponent from "../ForbiddenComponent";
 
 class DashboardComponent extends Component {
   constructor(props) {
@@ -210,7 +211,6 @@ class DashboardComponent extends Component {
         });
         if (this.state.cookies.get("userDetails").role === 3)
           this.getDashboardDetails();
-        else window.location.href = "/projects";
       })
       .catch((err) => {
         window.location.href = "/login";
@@ -218,6 +218,16 @@ class DashboardComponent extends Component {
   }
 
   render() {
+    if (
+      this.state.cookies.get("userDetails").role === 2 ||
+      this.state.cookies.get("userDetails").role > 3
+    ) {
+      return (
+        <React.Fragment>
+          <ForbiddenComponent selected="home" />
+        </React.Fragment>
+      );
+    }
     if (this.state.isLoading) {
       return (
         <React.Fragment>
@@ -225,6 +235,7 @@ class DashboardComponent extends Component {
         </React.Fragment>
       );
     }
+
     return (
       <React.Fragment>
         <div className="container-fluid">

@@ -19,6 +19,8 @@ import HeaderComponent from "../HeaderComponent";
 import SidebarComponent from "../SidebarComponent";
 import BottomBarMobileComponent from "../BottomBarMobileComponent";
 
+import ForbiddenComponent from "../ForbiddenComponent";
+
 class PeopleComponent extends Component {
   constructor(props) {
     super(props);
@@ -192,6 +194,13 @@ class PeopleComponent extends Component {
     this.getEmployees();
   }
   render() {
+    if (this.state.cookies.get("userDetails").role === 2) {
+      return (
+        <React.Fragment>
+          <ForbiddenComponent selected="people" />
+        </React.Fragment>
+      );
+    }
     return (
       <React.Fragment>
         <Dialog
