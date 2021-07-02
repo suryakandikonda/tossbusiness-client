@@ -59,8 +59,8 @@ class ClientSignupComponent extends Component {
   }
 
   verifyEmail = () => {
-    if (this.state.verify_id.trim().length !== 6) {
-      toaster.danger("OTP will be 6 characters length");
+    if (this.state.verify_id.trim().length === 0) {
+      toaster.danger("Please Enter OTP");
       return;
     }
     if (!this.state.verify_id.match(otpRegex)) {
