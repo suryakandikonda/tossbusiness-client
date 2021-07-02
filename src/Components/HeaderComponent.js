@@ -1,10 +1,4 @@
-import {
-  Avatar,
-  LogOutIcon,
-  SettingsIcon,
-  Dialog,
-  PersonIcon,
-} from "evergreen-ui";
+import { Avatar, LogOutIcon, Dialog, PersonIcon } from "evergreen-ui";
 import React, { Component } from "react";
 import {
   IoBookOutline,
@@ -13,6 +7,7 @@ import {
   IoDocumentTextOutline,
   IoNewspaperOutline,
   IoHomeOutline,
+  IoSettingsOutline,
 } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { Col, Container, Row } from "reactstrap";
@@ -47,6 +42,17 @@ class HeaderComponent extends Component {
                     <IoHomeOutline size={28} />
                   </span>
                   <span style={{ marginLeft: "20px" }}>Home</span>
+                </h4>
+              </div>
+            </Link>
+
+            <Link to="/account" id="NoHoverLink">
+              <div className="HeaderProfileIconItem">
+                <h4>
+                  <span>
+                    <IoSettingsOutline size={28} />
+                  </span>
+                  <span style={{ marginLeft: "20px" }}>Account</span>
                 </h4>
               </div>
             </Link>

@@ -1,9 +1,22 @@
-import { Button, Checkbox, Dialog, TextInput, toaster } from "evergreen-ui";
+import {
+  Button,
+  Checkbox,
+  Dialog,
+  TextInput,
+  toaster,
+  Tooltip,
+} from "evergreen-ui";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Col, Container, Row } from "reactstrap";
 
 import LoginImage from "../../assets/login.jpg";
+import {
+  emailRegex,
+  mobileNumberRegex,
+  otpRegex,
+  passwordRegex,
+} from "../../constants/regexValues";
 import { SERVER_URL } from "../../constants/variables";
 import PreLoginHeader from "../PreLoginHeader";
 
@@ -53,6 +66,14 @@ class RegisterComponent extends Component {
   }
 
   verifyEmail = () => {
+    if (this.state.verify_id.trim().length !== 6) {
+      toaster.danger("OTP will be 6 characters length");
+      return;
+    }
+    if (!this.state.verify_id.match(otpRegex)) {
+      toaster.danger("OTP will be only numeric");
+      return;
+    }
     this.setState({
       verify_clicked: true,
     });
@@ -103,9 +124,36 @@ class RegisterComponent extends Component {
 
     if (
       this.state.first_name.trim().length === 0 ||
-      this.state.last_name.trim().length === 0
+      this.state.last_name.trim().length === 0 ||
+      this.state.email.trim().length === 0 ||
+      this.state.mobile_number.trim().length === 0 ||
+      this.state.password.trim().length === 0 ||
+      this.state.company_name.trim().length === 0
     ) {
       toaster.danger("Please enter all required fields");
+      this.setState({
+        login_clicked: false,
+      });
+      return;
+    }
+    if (!this.state.email.match(emailRegex)) {
+      toaster.danger("Please enter valid email address");
+      this.setState({
+        login_clicked: false,
+      });
+      return;
+    }
+    if (!this.state.mobile_number.match(mobileNumberRegex)) {
+      toaster.danger("Please enter valid mobile number");
+      this.setState({
+        login_clicked: false,
+      });
+      return;
+    }
+    if (!this.state.password.match(passwordRegex)) {
+      toaster.danger(
+        "Please enter valid password. Password should be minimum 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character. "
+      );
       this.setState({
         login_clicked: false,
       });
@@ -181,14 +229,15 @@ class RegisterComponent extends Component {
         <Dialog
           isShown={this.state.verifyDialogOpen}
           title="Email Verification"
-          onCloseComplete={this.verifyEmail}
+          onCloseComplete={() => (window.location.href = "/login")}
+          onConfirm={this.verifyEmail}
           confirmLabel="OK"
         >
           <div>
             <p>
               We have sent an email with 6 digit OTP to your email address (
               {this.state.email}). Please enter the OTP to verify your email.
-              You can do this later too.
+              You can verify your email later also.
             </p>
             <br />
             <TextInput
@@ -255,6 +304,15 @@ class RegisterComponent extends Component {
                   />
                   <br />
                   <br />
+                  <p style={{ fontSize: "12px" }}>Password should: </p>
+                  <ul style={{ fontSize: "12px" }}>
+                    <li>Contain minimum 8 characters.</li>
+                    <li>At least one uppercase letter</li>
+                    <li>One lowercase letter</li>
+                    <li>One digit</li>
+                    <li>One special character</li>
+                  </ul>
+
                   <TextInput
                     name="company_name"
                     placeholder="Company Name *"

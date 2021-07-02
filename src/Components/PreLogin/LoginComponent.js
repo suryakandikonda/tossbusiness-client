@@ -9,6 +9,7 @@ import PreLoginHeader from "../PreLoginHeader";
 
 import Cookies from "universal-cookie";
 import { get, set } from "idb-keyval";
+import { emailRegex, otpRegex } from "../../constants/regexValues";
 
 class LoginComponent extends Component {
   constructor(props) {
@@ -25,10 +26,46 @@ class LoginComponent extends Component {
       verify_email_first_clicked: false,
       verify_email_second_clicked: false,
       email_verify_string: "",
+
+      //
+      send_email_clicked: false,
+      email_verify: "",
+
+      forgot_password_clicked: false,
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
+  handleForgotPasswordOpen = () => {
+    this.setState({
+      forgot_password_clicked: true,
+    });
+  };
+
+  handleForgotPasswordClose = () => {
+    this.setState({
+      forgot_password_clicked: false,
+      email_verify: "",
+    });
+  };
+
+  handleSendMailOpen = () => {
+    this.setState({
+      verify_email_first_clicked: false,
+      verify_email_second_clicked: false,
+      email_verify_string: "",
+      send_email_clicked: true,
+    });
+  };
+
+  handleSendMailClose = () => {
+    this.setState({
+      send_email_clicked: false,
+      email_verify: "",
+      verify_email_first_clicked: true,
+    });
+  };
 
   handleEmailVerificationOpen = () => {
     this.setState({
@@ -59,6 +96,16 @@ class LoginComponent extends Component {
     this.setState({
       login_clicked: true,
     });
+    if (
+      this.state.email.trim().length === 0 ||
+      this.state.password.trim().length === 0
+    ) {
+      toaster.danger("Please enter both email and password");
+      this.setState({
+        login_clicked: false,
+      });
+      return;
+    }
     this.loginUser({
       username: this.state.email,
       password: this.state.password,
@@ -122,6 +169,14 @@ class LoginComponent extends Component {
   };
 
   verifyEmailAPI = () => {
+    if (this.state.email_verify_string.trim().length !== 6) {
+      toaster.danger("OTP will be 6 characters length");
+      return;
+    }
+    if (!this.state.email_verify_string.match(otpRegex)) {
+      toaster.danger("OTP will be only numeric");
+      return;
+    }
     this.setState({
       verify_email_second_clicked: true,
     });
@@ -156,9 +211,129 @@ class LoginComponent extends Component {
       .catch((error) => console.log("error", error));
   };
 
+  sendEmail = () => {
+    if (this.state.email_verify.trim().length === 0) {
+      toaster.danger("Please enter email address");
+      return;
+    }
+    if (!this.state.email_verify.match(emailRegex)) {
+      toaster.danger("Please enter valid email address");
+      return;
+    }
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      email: this.state.email_verify,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(SERVER_URL + "/users/sendemailverification", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if (result.success) {
+          toaster.success("OTP sent your email.");
+          this.handleSendMailClose();
+        } else {
+          toaster.danger("Given email not associated with any account.");
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  forgotPasswordAPI = () => {
+    if (this.state.email_verify.trim().length === 0) {
+      toaster.danger("Please enter email address");
+      return;
+    }
+    if (!this.state.email_verify.match(emailRegex)) {
+      toaster.danger("Please enter valid email address");
+      return;
+    }
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      email: this.state.email_verify,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(SERVER_URL + "/users/forgotpassword", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if (result.success) {
+          toaster.success("New Password sent to your email successfully");
+          this.handleForgotPasswordClose();
+        } else {
+          toaster.danger("Given email not associated with any account.");
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
+
   render() {
     return (
       <React.Fragment>
+        {/* Forgot Password Dialog */}
+        <Dialog
+          isShown={this.state.forgot_password_clicked}
+          title="Forgot Password?"
+          onCloseComplete={this.handleForgotPasswordClose}
+          confirmLabel="Confirm"
+          onConfirm={this.forgotPasswordAPI}
+        >
+          <div>
+            <p>
+              Enter the email you used while registering. You will get email
+              with new password.
+            </p>
+            <br />
+            <br />
+            <TextInput
+              autoFocus
+              name="email_verify"
+              placeholder="Enter email"
+              value={this.state.email_verify}
+              onChange={this.handleInputChange}
+            />
+          </div>
+        </Dialog>
+
+        {/* Send Mail */}
+        <Dialog
+          isShown={this.state.send_email_clicked}
+          title="Send Verification Email"
+          onCloseComplete={this.handleSendMailClose}
+          confirmLabel="Send"
+          onConfirm={this.sendEmail}
+        >
+          <div>
+            <p>Enter the email you used while registering.</p>
+            <br />
+            <br />
+            <TextInput
+              autoFocus
+              name="email_verify"
+              placeholder="Enter email"
+              value={this.state.email_verify}
+              onChange={this.handleInputChange}
+            />
+          </div>
+        </Dialog>
         {/* Email Verification Dialog */}
         <Dialog
           isShown={this.state.verify_email_first_clicked}
@@ -170,6 +345,12 @@ class LoginComponent extends Component {
         >
           <div>
             <p>Enter 6 digit verification code you received on your email.</p>
+            <p
+              style={{ cursor: "pointer" }}
+              onClick={() => this.handleSendMailOpen()}
+            >
+              <b>Click here to send email verification again.</b>
+            </p>
             <br />
             <br />
             <TextInput
@@ -214,6 +395,13 @@ class LoginComponent extends Component {
                   />
                   <br />
                   <br />
+                  <div style={{ fontSize: "12px" }}>
+                    <p onClick={this.handleForgotPasswordOpen}>
+                      Forgot Password?
+                    </p>
+                  </div>
+                  <br />
+
                   <Button
                     appearance="primary"
                     isLoading={this.state.login_clicked}

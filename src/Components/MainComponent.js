@@ -15,6 +15,7 @@ import ReportsComponent from "./Reports/ReportsComponent";
 import PostsComponent from "./Posts/PostsComponent";
 import InventoryComponent from "./Inventory/InventoryComponent";
 import ClientSignupComponent from "./PreLogin/ClientSignupComponent";
+import AccountComponent from "./Account/AccountComponent";
 
 class MainComponent extends Component {
   render() {
@@ -63,6 +64,9 @@ class MainComponent extends Component {
 
           {/* Inventory */}
           <Route path="/inventory" component={InventoryComponent} />
+
+          {/* Account */}
+          <Route path="/account" component={AccountComponent} />
 
           <Redirect to="/login" />
         </Switch>
