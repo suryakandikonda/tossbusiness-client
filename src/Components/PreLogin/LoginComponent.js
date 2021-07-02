@@ -169,7 +169,7 @@ class LoginComponent extends Component {
   };
 
   verifyEmailAPI = () => {
-    if (this.state.verify_id.trim().length === 0) {
+    if (this.state.email_verify_string.trim().length === 0) {
       toaster.danger("Please Enter OTP");
       return;
     }
