@@ -120,8 +120,7 @@ class ClientSignupComponent extends Component {
       this.state.last_name.trim().length === 0 ||
       this.state.email.trim().length === 0 ||
       this.state.mobile_number.trim().length === 0 ||
-      this.state.password.trim().length === 0 ||
-      this.state.company_name.trim().length === 0
+      this.state.password.trim().length === 0
     ) {
       toaster.danger("Please enter all required fields");
       this.setState({
