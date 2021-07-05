@@ -373,7 +373,9 @@ class ViewProjectComponent extends Component {
       if (
         task.assigned_to[i]._id.toString() ==
           this.state.cookies.get("userDetails")._id.toString() ||
-        this.state.cookies.get("userDetails").role === 3
+        this.state.cookies.get("userDetails").role === 3 ||
+        (this.state.details.team_lead !== null &&
+          this.state.details.team_lead._id === this.state.userDetails._id)
       ) {
         return true;
       }
