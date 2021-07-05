@@ -1189,7 +1189,7 @@ class ViewProjectComponent extends Component {
                           </Button>
                         )}
 
-                        {this.state.userDetails.role === 3 && (
+                        {this.state.userDetails.role === 3 (
                           <Button
                             marginY={8}
                             marginRight={12}
@@ -1220,7 +1220,9 @@ class ViewProjectComponent extends Component {
                           </Button>
                         )}
 
-                        {this.state.userDetails.role === 3 && (
+                        {this.state.userDetails.role === 3 || (this.state.details.team_lead !== null &&
+                          this.state.details.team_lead._id ===
+                            this.state.userDetails._id)  && (
                           <Button
                             marginY={8}
                             marginRight={12}
