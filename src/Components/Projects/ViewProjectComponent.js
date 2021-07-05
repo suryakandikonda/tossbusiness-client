@@ -1189,21 +1189,20 @@ class ViewProjectComponent extends Component {
                           </Button>
                         )}
 
-                        {this.state.userDetails.role ===
-                          3(
-                            <Button
-                              marginY={8}
-                              marginRight={12}
-                              iconBefore={PeopleIcon}
-                              onClick={() =>
-                                this.setState({
-                                  update_team_lead_first_clicked: true,
-                                })
-                              }
-                            >
-                              Update Team Lead
-                            </Button>
-                          )}
+                        {this.state.userDetails.role === 3 && (
+                          <Button
+                            marginY={8}
+                            marginRight={12}
+                            iconBefore={PeopleIcon}
+                            onClick={() =>
+                              this.setState({
+                                update_team_lead_first_clicked: true,
+                              })
+                            }
+                          >
+                            Update Team Lead
+                          </Button>
+                        )}
 
                         {this.state.clientDetails._id ===
                           this.state.userDetails._id && (
@@ -1221,10 +1220,7 @@ class ViewProjectComponent extends Component {
                           </Button>
                         )}
 
-                        {this.state.userDetails.role === 3 ||
-                        (this.state.details.team_lead !== null &&
-                          this.state.details.team_lead._id ===
-                            this.state.userDetails._id) ? (
+                        {this.state.userDetails.role === 3 && (
                           <Button
                             marginY={8}
                             marginRight={12}
@@ -1232,9 +1228,21 @@ class ViewProjectComponent extends Component {
                           >
                             Update Technologies
                           </Button>
-                        ) : (
-                          ""
                         )}
+
+                        {this.state.details.team_lead !== null &&
+                          this.state.details.team_lead._id ===
+                            this.state.userDetails._id && (
+                            <Button
+                              marginY={8}
+                              marginRight={12}
+                              onClick={() =>
+                                this.handleUpdateTechnologiesOpen()
+                              }
+                            >
+                              Update Technologies
+                            </Button>
+                          )}
 
                         {this.state.userDetails.role === 3 && (
                           <Button
