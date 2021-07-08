@@ -170,12 +170,23 @@ p {
 }
 
 .InProgressDiv {
-  background-color: #388e3c;
   color: white;
   display: inline-block;
   padding: 4px 20px;
   padding-top: 6px;
   border-radius: 20px;
+}
+
+#ongoing {
+  background-color: #0288d1;
+}
+
+#completed {
+  background-color: #388e3c;
+}
+
+#stopped {
+  background-color: #d32f2f;
 }
 
 .ViewProjectsOpenTasksTitle {
@@ -244,8 +255,6 @@ p {
   outline: none;
   border: 1px solid rgba(0, 0, 0, 0.5);
 }
-
-
 
 .NotesItemsMainDiv {
   margin-top: 40px;

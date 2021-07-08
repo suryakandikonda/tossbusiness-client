@@ -486,7 +486,7 @@ class VisitsComponent extends Component {
         </div>
 
         <div className="d-block d-sm-none">
-          <BottomBarMobileComponent selected="dashboard" />
+          <BottomBarMobileComponent />
         </div>
       </React.Fragment>
     );

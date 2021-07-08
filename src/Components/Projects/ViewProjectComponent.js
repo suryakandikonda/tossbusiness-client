@@ -54,6 +54,7 @@ class ViewProjectComponent extends Component {
       technologies: [],
       clientDetails: {},
       allTechnologies: [],
+      originalAllTechnologies: [],
       projectProgress: 0,
       isLoading: true,
       show_project_details: false,
@@ -125,14 +126,20 @@ class ViewProjectComponent extends Component {
   };
 
   handleUpdateTechnologiesOpen = () => {
-    var arr = this.state.allTechnologies;
-    var newArr = [];
+    var arr = this.state.originalAllTechnologies;
+    var allTechNames = [];
+    var projectTechNames = [];
 
-    arr.forEach((item) => {
-      this.state.technologies.forEach((tech) => {});
-    });
+    this.state.technologies.forEach((item) =>
+      projectTechNames.push(item.technology.name)
+    );
+    arr.forEach(
+      (item) => !projectTechNames.includes(item.name) && allTechNames.push(item)
+    );
+    console.log("ARR", allTechNames);
 
     this.setState({
+      allTechnologies: allTechNames,
       update_technologies_first_clicked: true,
     });
   };
@@ -516,6 +523,7 @@ class ViewProjectComponent extends Component {
         if (result.success) {
           this.setState({
             allTechnologies: result.data,
+            originalAllTechnologies: result.data,
           });
         }
       })
@@ -579,6 +587,7 @@ class ViewProjectComponent extends Component {
         console.log(result);
         if (result.success) {
           toaster.success("Technology removed from Project");
+          this.handleUpdateTechnologiesClose();
           this.getProjectDetails();
         } else {
           toaster.danger("Something went wrong. Please try again");
@@ -609,6 +618,7 @@ class ViewProjectComponent extends Component {
         console.log(result);
         if (result.success) {
           toaster.success("Technology added into Project");
+          this.handleUpdateTechnologiesClose();
           this.getProjectDetails();
         } else {
           toaster.danger("Something went wrong. Please Try again");
@@ -779,6 +789,7 @@ class ViewProjectComponent extends Component {
                   this.addTechnologyToProject(event.target.value);
                 }}
               >
+                <option value="">Select Technology</option>
                 {this.state.allTechnologies.map((item) => (
                   <option value={item._id}>{item.name}</option>
                 ))}
@@ -1142,8 +1153,16 @@ class ViewProjectComponent extends Component {
 
                         <Col sm>
                           <div>
-                            <div className="InProgressDiv">
-                              <p>{this.state.details.status}</p>
+                            <div
+                              className="InProgressDiv"
+                              id={this.state.details.status}
+                            >
+                              <p>
+                                {this.state.details.status
+                                  .charAt(0)
+                                  .toUpperCase() +
+                                  this.state.details.status.slice(1)}
+                              </p>
                             </div>
                             <div style={{ marginTop: "40px" }}>
                               <h4>{this.state.projectProgress} % Completed</h4>
@@ -1201,6 +1220,11 @@ class ViewProjectComponent extends Component {
                                 update_team_lead_first_clicked: true,
                               })
                             }
+                            disabled={
+                              this.state.details.status === "ongoing"
+                                ? false
+                                : true
+                            }
                           >
                             Update Team Lead
                           </Button>
@@ -1227,6 +1251,11 @@ class ViewProjectComponent extends Component {
                             marginY={8}
                             marginRight={12}
                             onClick={() => this.handleUpdateTechnologiesOpen()}
+                            disabled={
+                              this.state.details.status === "ongoing"
+                                ? false
+                                : true
+                            }
                           >
                             Update Technologies
                           </Button>
@@ -1240,6 +1269,11 @@ class ViewProjectComponent extends Component {
                               marginRight={12}
                               onClick={() =>
                                 this.handleUpdateTechnologiesOpen()
+                              }
+                              disabled={
+                                this.state.details.status === "ongoing"
+                                  ? false
+                                  : true
                               }
                             >
                               Update Technologies
@@ -1264,6 +1298,11 @@ class ViewProjectComponent extends Component {
                             marginY={8}
                             marginRight={12}
                             onClick={() => this.handleGiveRatingOpen()}
+                            disabled={
+                              this.state.details.status !== "ongoing"
+                                ? false
+                                : true
+                            }
                           >
                             Give Rating
                           </Button>
@@ -1333,6 +1372,11 @@ class ViewProjectComponent extends Component {
                             marginRight={12}
                             iconBefore={AddIcon}
                             onClick={this.handleCreateTaskModalOpen}
+                            disabled={
+                              this.state.details.status === "ongoing"
+                                ? false
+                                : true
+                            }
                           >
                             Create New Task
                           </Button>
@@ -1374,26 +1418,29 @@ class ViewProjectComponent extends Component {
                                         </div>
                                       </Col>
                                       <Col sm>
-                                        <div style={{ textAlign: "right" }}>
-                                          {this.checkCanUpdateTaskProgress(
-                                            this.state.cookies.get(
-                                              "userDetails"
-                                            )._id,
-                                            task._id
-                                          ) ? (
-                                            <div>
-                                              <EditIcon
-                                                onClick={() =>
-                                                  this.handleTaskProgressUpdateOpen(
-                                                    task
-                                                  )
-                                                }
-                                              />
-                                            </div>
-                                          ) : (
-                                            ""
-                                          )}
-                                        </div>
+                                        {this.state.details.status ===
+                                          "ongoing" && (
+                                          <div style={{ textAlign: "right" }}>
+                                            {this.checkCanUpdateTaskProgress(
+                                              this.state.cookies.get(
+                                                "userDetails"
+                                              )._id,
+                                              task._id
+                                            ) ? (
+                                              <div>
+                                                <EditIcon
+                                                  onClick={() =>
+                                                    this.handleTaskProgressUpdateOpen(
+                                                      task
+                                                    )
+                                                  }
+                                                />
+                                              </div>
+                                            ) : (
+                                              ""
+                                            )}
+                                          </div>
+                                        )}
                                       </Col>
                                     </Row>
                                     <br />

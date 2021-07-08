@@ -21,6 +21,8 @@ import LoadingComponent from "./LoadingComponent";
 import Cookies from "universal-cookie";
 import { validateLogin } from "../constants/functions";
 import HeaderComponent from "./HeaderComponent";
+import ForbiddenComponent from "./ForbiddenComponent";
+import moment from "moment";
 
 class HomeComponent extends Component {
   constructor(props) {
@@ -60,6 +62,18 @@ class HomeComponent extends Component {
       assign_project_second_clicked: true,
     });
 
+    if (
+      moment(this.state.projectStartDate).isBefore(moment(new Date())) ||
+      moment(this.state.projectStartDate).isAfter(
+        moment(this.state.projectEndDate)
+      )
+    ) {
+      toaster.danger("Please enter valid dates");
+      this.setState({
+        assign_project_second_clicked: false,
+      });
+      return;
+    }
     var myHeaders = new Headers();
     myHeaders.append("company", this.state.selectedCompany);
     myHeaders.append("Content-Type", "application/json");
@@ -127,7 +141,6 @@ class HomeComponent extends Component {
     const value = target.value;
     const name = target.name;
 
-    if (name === "start_date") console.log(value);
     this.setState({
       [name]: value,
     });
@@ -218,6 +231,13 @@ class HomeComponent extends Component {
       });
   }
   render() {
+    if (this.state.cookies.get("userDetails").role !== 2) {
+      return (
+        <React.Fragment>
+          <ForbiddenComponent selected="home" />
+        </React.Fragment>
+      );
+    }
     return (
       <React.Fragment>
         {/* Assign Project Dialog */}

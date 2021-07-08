@@ -533,6 +533,9 @@ class InventoryComponent extends Component {
                 this.setState({ selectedProject: event.target.value });
               }}
             >
+              <option value="">
+                Select Project
+              </option>
               {this.state.projects.map((item) => (
                 <option value={item._id}>{item.name}</option>
               ))}
