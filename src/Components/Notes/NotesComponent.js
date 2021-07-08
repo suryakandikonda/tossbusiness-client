@@ -204,7 +204,7 @@ class NotesComponent extends Component {
                         appearance="primary"
                         onClick={this.handleAddDialogOpen}
                       >
-                        Create Notes
+                        Create New Notes
                       </Button>
 
                       <Button
