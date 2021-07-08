@@ -10,6 +10,7 @@ import PreLoginHeader from "../PreLoginHeader";
 import Cookies from "universal-cookie";
 import { get, set } from "idb-keyval";
 import { emailRegex, otpRegex } from "../../constants/regexValues";
+import { validateLogin } from "../../constants/functions";
 
 class LoginComponent extends Component {
   constructor(props) {
@@ -284,6 +285,14 @@ class LoginComponent extends Component {
       })
       .catch((error) => console.log("error", error));
   };
+
+  componentDidMount() {
+    validateLogin
+      .then((res) => {
+        window.location.href = "/projects";
+      })
+      .catch((err) => {});
+  }
 
   render() {
     return (
