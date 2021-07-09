@@ -235,14 +235,14 @@ class RegisterComponent extends Component {
         >
           <div>
             <p>
-              We have sent an email with 6 digit OTP to your email address (
+              We have sent an email OTP to your email address (
               {this.state.email}). Please enter the OTP to verify your email.
               You can verify your email later also.
             </p>
             <br />
             <TextInput
               name="verify_id"
-              placeholder="Enter 6 digit OTP here"
+              placeholder="Enter OTP here"
               onChange={this.handleInputChange}
             />
           </div>

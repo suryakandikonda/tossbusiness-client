@@ -353,7 +353,7 @@ class LoginComponent extends Component {
           isConfirmLoading={this.state.verify_email_second_clicked}
         >
           <div>
-            <p>Enter 6 digit verification code you received on your email.</p>
+            <p>Enter verification code you received on your email.</p>
             <p
               style={{ cursor: "pointer" }}
               onClick={() => this.handleSendMailOpen()}
